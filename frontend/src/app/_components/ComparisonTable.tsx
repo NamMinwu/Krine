@@ -6,7 +6,6 @@ import type { OptionInput } from "@/domains/decision/types";
 const ROWS = [
   { key: "gains", label: "얻는 것" },
   { key: "sacrifices", label: "포기하는 것" },
-  { key: "premises", label: "핵심 전제" },
 ] as const;
 
 export type OptionField = (typeof ROWS)[number]["key"];

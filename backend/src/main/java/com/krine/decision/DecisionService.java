@@ -55,7 +55,6 @@ public class DecisionService {
                 .label(o.label())
                 .gains(nn(o.gains()))
                 .sacrifices(nn(o.sacrifices()))
-                .premises(nn(o.premises()))
                 .build()));
         d.getConditions().clear();
         input.conditions().forEach(c -> d.getConditions().add(Condition.builder()

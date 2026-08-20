@@ -49,12 +49,10 @@ public class DataSeeder implements CommandLineRunner {
         d.getCriteria().addAll(List.of("현재 사용 불편", "추가 비용"));
         d.getOptions().add(option("지금 산다",
                 List.of("새 기기", "배터리 문제 해결"),
-                List.of("남은 약정 비용", "5개월 후 더 좋은 선택지"),
-                List.of("현재 불편이 비용보다 크다")));
+                List.of("남은 약정 비용", "5개월 후 더 좋은 선택지")));
         d.getOptions().add(option("5개월 기다린다",
                 List.of("위약금·중복 비용 절감", "약정 종료"),
-                List.of("불편한 기기를 계속 사용"),
-                List.of("현재 기기로 5개월은 버틸 수 있다")));
+                List.of("불편한 기기를 계속 사용")));
         d.getConditions().add(Condition.builder()
                 .text("약정 만료 시점 도래").type(ConditionType.DATE)
                 .dueDate(LocalDate.now().minusDays(1)).build());
@@ -80,12 +78,10 @@ public class DataSeeder implements CommandLineRunner {
         d.getCriteria().addAll(List.of("성장 가능성", "안정성"));
         d.getOptions().add(option("제안을 받아들인다",
                 List.of("연봉 상승", "새로운 도전"),
-                List.of("익숙한 팀", "현재 회사에서의 평판"),
-                List.of("새 회사에서도 성과를 낼 수 있다")));
+                List.of("익숙한 팀", "현재 회사에서의 평판")));
         d.getOptions().add(option("현재 회사에 남는다",
                 List.of("안정성", "익숙한 환경"),
-                List.of("연봉 상승 기회"),
-                List.of("현재 회사에서 성장 여지가 남아 있다")));
+                List.of("연봉 상승 기회")));
         d.getConditions().add(Condition.builder()
                 .text("현 회사 연봉 협상 결과가 나오는 경우").type(ConditionType.EVENT).build());
         d.getObjections().add(Objection.builder()
@@ -106,12 +102,10 @@ public class DataSeeder implements CommandLineRunner {
         d.getCriteria().addAll(List.of("지속 가능성", "수면"));
         d.getOptions().add(option("저녁 운동 유지",
                 List.of("퇴근 후 여유", "수면에 영향 없음"),
-                List.of("약속에 밀려 거르는 날 증가"),
-                List.of("약속을 줄일 수 있다")));
+                List.of("약속에 밀려 거르는 날 증가")));
         d.getOptions().add(option("아침으로 변경",
                 List.of("변수 없는 시간 확보"),
-                List.of("기상 부담"),
-                List.of("아침 기상을 유지할 수 있다")));
+                List.of("기상 부담")));
         d.getConditions().add(Condition.builder()
                 .text("한 달 뒤 지속 여부 확인").type(ConditionType.DATE)
                 .dueDate(LocalDate.now().plusDays(20)).build());
@@ -131,12 +125,10 @@ public class DataSeeder implements CommandLineRunner {
         d.getCriteria().addAll(List.of("작업 집중 시간", "정보 공유 속도"));
         d.getOptions().add(option("주 2회로 줄인다",
                 List.of("집중 시간 확보"),
-                List.of("이슈 공유 지연 가능성"),
-                List.of("비동기 공유로 회의를 대체할 수 있다")));
+                List.of("이슈 공유 지연 가능성")));
         d.getOptions().add(option("주 4회 유지",
                 List.of("빠른 이슈 공유"),
-                List.of("작업 시간 잠식"),
-                List.of("회의가 실제로 문제를 빨리 잡아낸다")));
+                List.of("작업 시간 잠식")));
         d.getConditions().add(Condition.builder()
                 .text("분기 회고에서 효과 확인").type(ConditionType.DATE)
                 .dueDate(LocalDate.now().plusDays(45)).build());
@@ -156,12 +148,11 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private static DecisionOption option(String label, List<String> gains,
-                                         List<String> sacrifices, List<String> premises) {
+                                         List<String> sacrifices) {
         return DecisionOption.builder()
                 .label(label)
                 .gains(new java.util.ArrayList<>(gains))
                 .sacrifices(new java.util.ArrayList<>(sacrifices))
-                .premises(new java.util.ArrayList<>(premises))
                 .build();
     }
 

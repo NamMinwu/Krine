@@ -26,8 +26,4 @@ public class DecisionOption {
     @ElementCollection
     @Builder.Default
     private List<String> sacrifices = new ArrayList<>();
-
-    @ElementCollection
-    @Builder.Default
-    private List<String> premises = new ArrayList<>();
 }

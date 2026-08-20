@@ -127,7 +127,7 @@ cd backend && ./gradlew test   # 도메인·API·LLM 플로우 테스트 12건
 
 ```
 Decision (판단) — status: DRAFT → ACTIVE (단방향, confirm 시 잠금)
-├─ DecisionOption[]   선택지 (얻는 것 / 포기하는 것 / 전제)
+├─ DecisionOption[]   선택지 (얻는 것 / 포기하는 것)
 ├─ DecisionVersion[]  판단 버전 — append-only, @Setter 없음 ★
 ├─ Condition[]        변경 조건 — DATE(자동 도래) | EVENT(체크인)
 ├─ Objection[]        반론 — 방어/수정/보류, 보류는 재검토 큐로

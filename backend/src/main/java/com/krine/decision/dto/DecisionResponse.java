@@ -24,10 +24,10 @@ public record DecisionResponse(Long id, String title, String situation, String t
                                LocalDateTime createdAt, LocalDateTime updatedAt) {
 
     public record OptionResponse(Long id, String label, List<String> gains,
-                                 List<String> sacrifices, List<String> premises) {
+                                 List<String> sacrifices) {
         static OptionResponse from(DecisionOption o) {
             return new OptionResponse(o.getId(), o.getLabel(), List.copyOf(o.getGains()),
-                    List.copyOf(o.getSacrifices()), List.copyOf(o.getPremises()));
+                    List.copyOf(o.getSacrifices()));
         }
     }
 

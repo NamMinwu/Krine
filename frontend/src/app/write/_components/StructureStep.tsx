@@ -105,7 +105,7 @@ export default function StructureStep({
           }
           return {
             ...s,
-            options: [...s.options, { label, gains: [], sacrifices: [], premises: [] }],
+            options: [...s.options, { label, gains: [], sacrifices: [] }],
           };
         }
         case "optionLabel": {

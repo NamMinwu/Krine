@@ -152,8 +152,7 @@ public class FlowService {
                 .append(String.join(", ", d.getCriteria()));
         d.getOptions().forEach(o -> sb.append("\n선택지 ").append(o.getLabel())
                 .append(" | 얻는 것: ").append(String.join(", ", o.getGains()))
-                .append(" | 포기한 것: ").append(String.join(", ", o.getSacrifices()))
-                .append(" | 전제: ").append(String.join(", ", o.getPremises())));
+                .append(" | 포기한 것: ").append(String.join(", ", o.getSacrifices())));
         return sb.toString();
     }
 

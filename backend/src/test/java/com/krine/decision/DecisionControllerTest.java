@@ -33,7 +33,7 @@ class DecisionControllerTest {
                         .content("""
                                 {"title":"기존 vs 새 방식","situation":"일정 압박","topicTag":"업무",
                                  "criteria":["일정"],
-                                 "options":[{"label":"기존 유지","gains":["일정 준수"],"sacrifices":["장기 효율"],"premises":["일정이 최우선"]}],
+                                 "options":[{"label":"기존 유지","gains":["일정 준수"],"sacrifices":["장기 효율"]}],
                                  "conditions":[{"text":"다음 분기 여유","type":"DATE","dueDate":"2026-10-01"}]}
                                 """))
                 .andExpect(status().isOk())

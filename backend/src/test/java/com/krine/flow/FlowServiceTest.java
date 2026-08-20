@@ -30,7 +30,7 @@ class FlowServiceTest {
                     return "{\"question\":\"가장 중요하게 본 기준은 무엇이었나요?\",\"choices\":[\"비용\",\"편의\",\"직접 입력\"],\"targets\":\"criteria\"}";
                 }
                 if (user.contains("[STRUCTURE]")) {
-                    return "{\"title\":\"휴대폰을 지금 바꿀까?\",\"situation\":\"약정 5개월\",\"topicTag\":\"구매\",\"criteria\":[\"편의\"],\"options\":[{\"label\":\"지금 산다\",\"gains\":[\"새 기기\"],\"sacrifices\":[\"약정 비용\"],\"premises\":[\"불편이 크다\"]}],\"conditions\":[{\"text\":\"기기 고장\",\"type\":\"EVENT\",\"dueDate\":null}],\"suggestedReviewDate\":\"2026-09-19\"}";
+                    return "{\"title\":\"휴대폰을 지금 바꿀까?\",\"situation\":\"약정 5개월\",\"topicTag\":\"구매\",\"criteria\":[\"편의\"],\"options\":[{\"label\":\"지금 산다\",\"gains\":[\"새 기기\"],\"sacrifices\":[\"약정 비용\"]}],\"conditions\":[{\"text\":\"기기 고장\",\"type\":\"EVENT\",\"dueDate\":null}],\"suggestedReviewDate\":\"2026-09-19\"}";
                 }
                 if (user.contains("[OBJECTION]")) {
                     return "{\"perspective\":\"비용 관점\",\"objection\":\"5개월 뒤가 더 쌀 수 있어요. 어떻게 보시나요?\"}";

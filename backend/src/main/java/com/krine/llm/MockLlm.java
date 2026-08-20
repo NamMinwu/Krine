@@ -38,8 +38,8 @@ public class MockLlm implements LlmPort {
             LocalDate suggested = LocalDate.now().plusDays(30);
             return "{\"title\":\"이 선택을 유지할까, 바꿀까?\",\"situation\":\"일상 속에서 내린 선택을 돌아보는 상황\","
                     + "\"topicTag\":\"일상\",\"criteria\":[\"마음 편함\",\"시간\"],"
-                    + "\"options\":[{\"label\":\"지금 선택 유지\",\"gains\":[\"익숙함\",\"당장의 안정\"],\"sacrifices\":[\"다른 기회\"],\"premises\":[\"현재 방식이 아직 유효하다\"]},"
-                    + "{\"label\":\"다른 길 선택\",\"gains\":[\"새로운 가능성\"],\"sacrifices\":[\"전환 비용\"],\"premises\":[\"바꿀 만큼 불만이 크다\"]}],"
+                    + "\"options\":[{\"label\":\"지금 선택 유지\",\"gains\":[\"익숙함\",\"당장의 안정\"],\"sacrifices\":[\"다른 기회\"]},"
+                    + "{\"label\":\"다른 길 선택\",\"gains\":[\"새로운 가능성\"],\"sacrifices\":[\"전환 비용\"]}],"
                     + "\"conditions\":[{\"text\":\"상황이 크게 바뀌는 사건 발생\",\"type\":\"EVENT\",\"dueDate\":null}],"
                     + "\"suggestedReviewDate\":\"" + suggested + "\"}";
         }

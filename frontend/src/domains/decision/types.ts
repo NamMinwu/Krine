@@ -17,7 +17,6 @@ export interface DecisionOption {
   label: string;
   gains: string[];
   sacrifices: string[];
-  premises: string[];
 }
 
 export interface DecisionVersion {
@@ -118,7 +117,6 @@ export interface OptionInput {
   label: string;
   gains: string[];
   sacrifices: string[];
-  premises: string[];
 }
 
 export interface StructureInput {
