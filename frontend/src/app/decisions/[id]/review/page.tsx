@@ -4,7 +4,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Calendar, ChevronDown } from "lucide-react";
 import ComparisonTable from "@/app/_components/ComparisonTable";
 import { relativeTime } from "@/domains/decision/labels";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
 import { useDecision, useReview, useReviewQueue } from "@/domains/decision/queries";
 import type { QueueKind } from "@/domains/decision/types";
