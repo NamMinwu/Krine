@@ -130,14 +130,6 @@ export default function DecisionDetailPage() {
         </section>
       )}
 
-      {decision.firstExpression && currentVersion && (
-        <section className="rounded-2xl border border-line bg-surface p-4">
-          <h2 className="text-xs font-semibold text-ink-soft">처음 vs 지금</h2>
-          <p className="mt-1 text-sm text-ink-soft">“{decision.firstExpression}”</p>
-          <p className="mt-1 text-sm font-medium">→ “{currentVersion.conclusion}”</p>
-        </section>
-      )}
-
       {decision.versions.length > 0 && (
         <section className="rounded-2xl border border-line bg-surface p-4">
           <h2 className="mb-3 text-xs font-semibold text-ink-soft">판단의 변화</h2>
