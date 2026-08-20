@@ -51,10 +51,12 @@ public class OpenAiClient implements LlmPort {
                     .body(body)
                     .retrieve()
                     .body(String.class);
-            JsonNode text = objectMapper.readTree(raw).path("choices").path(0).path("message").path("content");
+            JsonNode root = objectMapper.readTree(raw);
+            JsonNode text = root.path("choices").path(0).path("message").path("content");
             if (text.isMissingNode()) {
                 throw new LlmParseException("OpenAI 응답에 텍스트가 없습니다: " + raw);
             }
+            logUsage(root, userPrompt);
             return text.asText();
         } catch (LlmParseException e) {
             throw e;
@@ -62,5 +64,21 @@ public class OpenAiClient implements LlmPort {
             log.error("OpenAI 호출 실패", e);
             throw new LlmParseException("OpenAI 호출에 실패했습니다", e);
         }
+    }
+
+    // 운영 지표: 호출 단계별 토큰 사용량
+    private void logUsage(JsonNode root, String userPrompt) {
+        JsonNode usage = root.path("usage");
+        if (usage.isMissingNode()) {
+            return;
+        }
+        String step = userPrompt.startsWith("[")
+                ? userPrompt.substring(0, userPrompt.indexOf(']') + 1)
+                : "[?]";
+        log.info("LLM_USAGE step={} prompt={} output={} total={}",
+                step,
+                usage.path("prompt_tokens").asInt(),
+                usage.path("completion_tokens").asInt(),
+                usage.path("total_tokens").asInt());
     }
 }
