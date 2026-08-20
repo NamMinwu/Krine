@@ -152,8 +152,11 @@ public class FlowService {
 
     private static String structureSummaryOf(Decision d) {
         StringBuilder sb = new StringBuilder("제목: ").append(d.getTitle());
-        sb.append("\n기준: ").append(String.join(", ", d.getCriteria()));
+        sb.append("\n사용자가 이미 중요하게 본 기준(관점으로 쓰지 말 것): ")
+                .append(String.join(", ", d.getCriteria()));
         d.getOptions().forEach(o -> sb.append("\n선택지 ").append(o.getLabel())
+                .append(" | 얻는 것: ").append(String.join(", ", o.getGains()))
+                .append(" | 포기한 것: ").append(String.join(", ", o.getSacrifices()))
                 .append(" | 전제: ").append(String.join(", ", o.getPremises())));
         return sb.toString();
     }
