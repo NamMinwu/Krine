@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class MockLlm implements LlmPort {
     private static final Pattern QUESTION_COUNT = Pattern.compile("질문 수: (\\d+)");
-    private static final Pattern CHALLENGE_COUNT = Pattern.compile("반론 수: (\\d+)");
+    private static final Pattern OBJECTION_COUNT = Pattern.compile("반론 수: (\\d+)");
 
     private static final List<String> QUESTIONS = List.of(
             "{\"question\":\"그 선택 말고 고민했던 다른 길이 있었나요?\",\"choices\":[\"있었지만 접었어요\",\"딱히 없었어요\",\"직접 입력\"],\"targets\":\"alternatives\"}",
@@ -20,7 +20,7 @@ public class MockLlm implements LlmPort {
             "{\"question\":\"이 선택으로 포기하게 된 것이 있다면 무엇인가요?\",\"choices\":[\"다른 기회\",\"비용 절약\",\"딱히 없음\",\"직접 입력\"],\"targets\":\"sacrifices\"}",
             "{\"question\":\"어떤 상황이 생기면 이 판단을 다시 생각해볼 것 같나요?\",\"choices\":[\"상황이 크게 바뀌면\",\"기한이 지나면\",\"직접 입력\"],\"targets\":\"conditions\"}");
 
-    private static final List<String> CHALLENGES = List.of(
+    private static final List<String> OBJECTIONS = List.of(
             "{\"perspective\":\"비용을 가장 중요하게 본다면?\",\"objection\":\"이 선택이 만드는 추가 비용이 얻는 것보다 클 수 있습니다. 그 비용을 어떻게 평가하셨나요?\"}",
             "{\"perspective\":\"시간이 지난 뒤를 생각한다면?\",\"objection\":\"조금 더 기다리면 지금보다 나은 선택지가 생길 수도 있습니다. 기다리는 쪽은 왜 배제하셨나요?\"}");
 
@@ -43,9 +43,9 @@ public class MockLlm implements LlmPort {
                     + "\"conditions\":[{\"text\":\"상황이 크게 바뀌는 사건 발생\",\"type\":\"EVENT\",\"dueDate\":null}],"
                     + "\"suggestedReviewDate\":\"" + suggested + "\"}";
         }
-        if (userPrompt.contains("[CHALLENGE]")) {
-            int count = extract(CHALLENGE_COUNT, userPrompt);
-            return CHALLENGES.get(Math.min(count, CHALLENGES.size() - 1));
+        if (userPrompt.contains("[OBJECTION]")) {
+            int count = extract(OBJECTION_COUNT, userPrompt);
+            return OBJECTIONS.get(Math.min(count, OBJECTIONS.size() - 1));
         }
         if (userPrompt.contains("[REFLECT]")) {
             return "{\"reflectBack\":\"답변을 보면 당장의 이득보다 스스로 감당할 수 있는 리스크를 더 중요하게 보고 계신 것 같아요. 맞나요?\"}";

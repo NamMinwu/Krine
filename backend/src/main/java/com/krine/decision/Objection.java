@@ -1,6 +1,6 @@
 package com.krine.decision;
 
-import com.krine.decision.enums.ChallengeResolution;
+import com.krine.decision.enums.ObjectionResolution;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Challenge {
+public class Objection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,5 +28,5 @@ public class Challenge {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ChallengeResolution resolution = ChallengeResolution.OPEN;
+    private ObjectionResolution resolution = ObjectionResolution.OPEN;
 }

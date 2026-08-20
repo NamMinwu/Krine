@@ -9,7 +9,7 @@ import type {
   StructureDraft,
   StructureInput,
 } from "@/domains/decision/types";
-import ChallengeStep from "./_components/ChallengeStep";
+import ObjectionStep from "./_components/ObjectionStep";
 import DiaryStep from "./_components/DiaryStep";
 import DiscoverStep from "./_components/DiscoverStep";
 import QuestionStep from "./_components/QuestionStep";
@@ -23,7 +23,7 @@ type Step =
   | "questions"
   | "structureLoading"
   | "structure"
-  | "challenge"
+  | "objection"
   | "reflection";
 
 function WriteFlow() {
@@ -71,7 +71,7 @@ function WriteFlow() {
           } else {
             setStep("diary");
           }
-        } else if (decision.flowStep === "STRUCTURE" || decision.flowStep === "CHALLENGE") {
+        } else if (decision.flowStep === "STRUCTURE" || decision.flowStep === "OBJECTION") {
           void loadStructure(id);
         } else if (decision.flowStep === "DONE") {
           router.replace(`/decisions/${id}`);
@@ -145,7 +145,7 @@ function WriteFlow() {
       await decisionApi.saveStructure(decisionId, input);
       // 반박에서 "판단을 수정한다"로 돌아올 때를 위해 최신 구조를 유지
       setStructureDraft({ ...input, suggestedReviewDate: null });
-      setStep("challenge");
+      setStep("objection");
     } finally {
       setIsBusy(false);
     }
@@ -207,9 +207,9 @@ function WriteFlow() {
       return structureDraft ? (
         <StructureStep draft={structureDraft} isSaving={isBusy} onSave={saveStructure} />
       ) : null;
-    case "challenge":
+    case "objection":
       return decisionId !== null ? (
-        <ChallengeStep
+        <ObjectionStep
           decisionId={decisionId}
           onRevise={() => setStep("structure")}
           onDone={() => setStep("reflection")}

@@ -1,5 +1,5 @@
 import type {
-  ChallengeResult,
+  ObjectionResult,
   Decision,
   DecisionSummary,
   DiscoverResult,
@@ -57,15 +57,15 @@ export const decisionApi = {
       method: "POST",
       body: JSON.stringify({ conclusion, firstExpression }),
     }),
-  challenge: (id: number) =>
-    apiFetch<ChallengeResult>(`/api/decisions/${id}/challenge`, { method: "POST" }),
-  answerChallenge: (challengeId: number, answer: string) =>
-    apiFetch<{ reflectBack: string }>(`/api/challenges/${challengeId}/answer`, {
+  objection: (id: number) =>
+    apiFetch<ObjectionResult>(`/api/decisions/${id}/objection`, { method: "POST" }),
+  answerObjection: (objectionId: number, answer: string) =>
+    apiFetch<{ reflectBack: string }>(`/api/objections/${objectionId}/answer`, {
       method: "POST",
       body: JSON.stringify({ answer }),
     }),
-  resolveChallenge: (challengeId: number, resolution: string) =>
-    apiFetch<Decision>(`/api/challenges/${challengeId}/resolve`, {
+  resolveObjection: (objectionId: number, resolution: string) =>
+    apiFetch<Decision>(`/api/objections/${objectionId}/resolve`, {
       method: "POST",
       body: JSON.stringify({ resolution }),
     }),

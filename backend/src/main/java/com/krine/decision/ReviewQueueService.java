@@ -1,7 +1,7 @@
 package com.krine.decision;
 
 import com.krine.decision.dto.ReviewQueueItem;
-import com.krine.decision.enums.ChallengeResolution;
+import com.krine.decision.enums.ObjectionResolution;
 import com.krine.decision.enums.ConditionStatus;
 import com.krine.decision.enums.ConditionType;
 import com.krine.decision.enums.DecisionStatus;
@@ -35,9 +35,9 @@ public class ReviewQueueService {
                     items.add(new ReviewQueueItem(d.getId(), d.getTitle(), "EVENT_CHECKIN", c.getId(), c.getText(), null));
                 }
             }
-            for (Challenge ch : d.getChallenges()) {
-                if (ch.getResolution() == ChallengeResolution.DEFERRED) {
-                    items.add(new ReviewQueueItem(d.getId(), d.getTitle(), "DEFERRED_CHALLENGE", ch.getId(), ch.getObjection(), null));
+            for (Objection ch : d.getObjections()) {
+                if (ch.getResolution() == ObjectionResolution.DEFERRED) {
+                    items.add(new ReviewQueueItem(d.getId(), d.getTitle(), "DEFERRED_OBJECTION", ch.getId(), ch.getObjection(), null));
                 }
             }
         }

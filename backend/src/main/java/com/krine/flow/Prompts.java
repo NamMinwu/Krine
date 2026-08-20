@@ -46,7 +46,7 @@ public final class Prompts {
              "suggestedReviewDate": "YYYY-MM-DD 또는 null"}
             """;
 
-    public static final String CHALLENGE = """
+    public static final String OBJECTION = """
             확정된 판단 구조를 보고, 판단의 특정 전제나 기준 하나를 짚는 반론 1개를 제시해라.
             반론은 사용자를 이기기 위한 것이 아니라 사용자가 자신의 기준을 더 명확히 하도록 돕는 것이다.
             이미 제시한 반론과 겹치지 않는 새로운 관점을 골라라. 반론 끝은 사용자에게 되묻는 질문으로 마무리해라.

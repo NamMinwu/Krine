@@ -1,6 +1,6 @@
 package com.krine.decision.dto;
 
-import com.krine.decision.Challenge;
+import com.krine.decision.Objection;
 import com.krine.decision.Condition;
 import com.krine.decision.Decision;
 import com.krine.decision.DecisionOption;
@@ -18,7 +18,7 @@ public record DecisionResponse(Long id, String title, String situation, String t
                                List<OptionResponse> options,
                                List<VersionResponse> versions,
                                List<ConditionResponse> conditions,
-                               List<ChallengeResponse> challenges,
+                               List<ObjectionResponse> objections,
                                List<MessageResponse> messages,
                                LocalDateTime createdAt, LocalDateTime updatedAt) {
 
@@ -44,10 +44,10 @@ public record DecisionResponse(Long id, String title, String situation, String t
         }
     }
 
-    public record ChallengeResponse(Long id, String perspective, String objection,
+    public record ObjectionResponse(Long id, String perspective, String objection,
                                     String userAnswer, String reflectBack, String resolution) {
-        static ChallengeResponse from(Challenge ch) {
-            return new ChallengeResponse(ch.getId(), ch.getPerspective(), ch.getObjection(),
+        static ObjectionResponse from(Objection ch) {
+            return new ObjectionResponse(ch.getId(), ch.getPerspective(), ch.getObjection(),
                     ch.getUserAnswer(), ch.getReflectBack(), ch.getResolution().name());
         }
     }
@@ -67,7 +67,7 @@ public record DecisionResponse(Long id, String title, String situation, String t
                 d.getOptions().stream().map(OptionResponse::from).toList(),
                 d.getVersions().stream().map(VersionResponse::from).toList(),
                 d.getConditions().stream().map(ConditionResponse::from).toList(),
-                d.getChallenges().stream().map(ChallengeResponse::from).toList(),
+                d.getObjections().stream().map(ObjectionResponse::from).toList(),
                 d.getMessages().stream().map(MessageResponse::from).toList(),
                 d.getCreatedAt(), d.getUpdatedAt());
     }

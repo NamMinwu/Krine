@@ -1,12 +1,12 @@
 package com.krine.seed;
 
-import com.krine.decision.Challenge;
+import com.krine.decision.Objection;
 import com.krine.decision.Condition;
 import com.krine.decision.Decision;
 import com.krine.decision.DecisionOption;
 import com.krine.decision.DecisionRepository;
 import com.krine.decision.DecisionVersion;
-import com.krine.decision.enums.ChallengeResolution;
+import com.krine.decision.enums.ObjectionResolution;
 import com.krine.decision.enums.ConditionType;
 import com.krine.decision.enums.DecisionStatus;
 import com.krine.decision.enums.FlowStep;
@@ -60,17 +60,17 @@ public class DataSeeder implements CommandLineRunner {
                 .dueDate(LocalDate.now().minusDays(1)).build());
         d.getConditions().add(Condition.builder()
                 .text("기기가 고장 나는 경우").type(ConditionType.EVENT).build());
-        d.getChallenges().add(Challenge.builder()
+        d.getObjections().add(Objection.builder()
                 .perspective("미래의 가격을 고려한다면?")
                 .objection("5개월 후에는 새 모델이 출시되어 지금보다 나은 선택지가 생길 수 있습니다. 그 가능성은 어떻게 평가하셨나요?")
                 .userAnswer("배터리 문제로 업무 중 충전이 반복되고 있어서, 미래의 더 나은 선택지보다 현재의 불편을 더 크게 평가했다.")
                 .reflectBack("미래의 제품보다 현재의 불편 해소를 더 중요하게 보시는군요. 맞나요?")
-                .resolution(ChallengeResolution.DEFENDED).build());
+                .resolution(ObjectionResolution.DEFENDED).build());
         d.getVersions().add(version(1, "지금 산다", Verdict.INITIAL, null, 3));
         return d;
     }
 
-    // 2. 보류된 반론 → 재검토 큐의 DEFERRED_CHALLENGE 데모
+    // 2. 보류된 반론 → 재검토 큐의 DEFERRED_OBJECTION 데모
     private Decision jobOffer() {
         Decision d = base("이직 제안을 받아들일까?",
                 "연봉이 더 높은 이직 제안을 받았지만 새 회사의 팀 분위기와 안정성이 확실하지 않다.",
@@ -88,10 +88,10 @@ public class DataSeeder implements CommandLineRunner {
                 List.of("현재 회사에서 성장 여지가 남아 있다")));
         d.getConditions().add(Condition.builder()
                 .text("현 회사 연봉 협상 결과가 나오는 경우").type(ConditionType.EVENT).build());
-        d.getChallenges().add(Challenge.builder()
+        d.getObjections().add(Objection.builder()
                 .perspective("성장을 가장 중요하게 본다면?")
                 .objection("안정성을 이유로 남는 선택이 반복되면, 성장 기회를 계속 미루게 되는 것은 아닐까요?")
-                .resolution(ChallengeResolution.DEFERRED).build());
+                .resolution(ObjectionResolution.DEFERRED).build());
         d.getVersions().add(version(1, "받아들이지 않는다", Verdict.INITIAL, null, 7));
         return d;
     }

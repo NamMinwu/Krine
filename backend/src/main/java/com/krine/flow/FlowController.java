@@ -3,7 +3,7 @@ package com.krine.flow;
 import com.krine.common.ApiResponse;
 import com.krine.decision.dto.DecisionResponse;
 import com.krine.flow.dto.AnswerResult;
-import com.krine.flow.dto.ChallengeResult;
+import com.krine.flow.dto.ObjectionResult;
 import com.krine.flow.dto.DiscoverResult;
 import com.krine.flow.dto.NextQuestion;
 import com.krine.flow.dto.StructureDraft;
@@ -37,20 +37,20 @@ public class FlowController {
         return ApiResponse.ok(flowService.structureDraft(id));
     }
 
-    @PostMapping("/decisions/{id}/challenge")
-    public ApiResponse<ChallengeResult> challenge(@PathVariable Long id) {
-        return ApiResponse.ok(flowService.challenge(id));
+    @PostMapping("/decisions/{id}/objection")
+    public ApiResponse<ObjectionResult> objection(@PathVariable Long id) {
+        return ApiResponse.ok(flowService.objection(id));
     }
 
-    @PostMapping("/challenges/{challengeId}/answer")
-    public ApiResponse<AnswerResult> answerChallenge(@PathVariable Long challengeId,
+    @PostMapping("/objections/{objectionId}/answer")
+    public ApiResponse<AnswerResult> answerObjection(@PathVariable Long objectionId,
                                                      @RequestBody Map<String, String> body) {
-        return ApiResponse.ok(flowService.answerChallenge(challengeId, body.get("answer")));
+        return ApiResponse.ok(flowService.answerObjection(objectionId, body.get("answer")));
     }
 
-    @PostMapping("/challenges/{challengeId}/resolve")
-    public ApiResponse<DecisionResponse> resolveChallenge(@PathVariable Long challengeId,
+    @PostMapping("/objections/{objectionId}/resolve")
+    public ApiResponse<DecisionResponse> resolveObjection(@PathVariable Long objectionId,
                                                           @RequestBody Map<String, String> body) {
-        return ApiResponse.ok(flowService.resolveChallenge(challengeId, body.get("resolution")));
+        return ApiResponse.ok(flowService.resolveObjection(objectionId, body.get("resolution")));
     }
 }

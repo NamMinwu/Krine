@@ -3,14 +3,14 @@ export type FlowStep =
   | "DIARY"
   | "QUESTIONS"
   | "STRUCTURE"
-  | "CHALLENGE"
+  | "OBJECTION"
   | "REFLECTION"
   | "DONE";
 export type Verdict = "INITIAL" | "MAINTAINED" | "REVISED" | "REVERSED";
 export type ConditionType = "DATE" | "EVENT";
 export type ConditionStatus = "PENDING" | "TRIGGERED" | "DISMISSED";
-export type ChallengeResolution = "OPEN" | "DEFENDED" | "REVISED" | "DEFERRED";
-export type QueueKind = "DUE_DATE" | "EVENT_CHECKIN" | "DEFERRED_CHALLENGE";
+export type ObjectionResolution = "OPEN" | "DEFENDED" | "REVISED" | "DEFERRED";
+export type QueueKind = "DUE_DATE" | "EVENT_CHECKIN" | "DEFERRED_OBJECTION";
 
 export interface DecisionOption {
   id: number | null;
@@ -37,13 +37,13 @@ export interface Condition {
   status: ConditionStatus;
 }
 
-export interface Challenge {
+export interface Objection {
   id: number;
   perspective: string;
   objection: string;
   userAnswer: string | null;
   reflectBack: string | null;
-  resolution: ChallengeResolution;
+  resolution: ObjectionResolution;
 }
 
 export interface FlowMessage {
@@ -66,7 +66,7 @@ export interface Decision {
   options: DecisionOption[];
   versions: DecisionVersion[];
   conditions: Condition[];
-  challenges: Challenge[];
+  objections: Objection[];
   messages: FlowMessage[];
   createdAt: string;
   updatedAt: string;
@@ -133,8 +133,8 @@ export interface StructureDraft extends StructureInput {
   suggestedReviewDate: string | null;
 }
 
-export interface ChallengeResult {
-  challengeId: number;
+export interface ObjectionResult {
+  objectionId: number;
   perspective: string;
   objection: string;
   remaining: number;

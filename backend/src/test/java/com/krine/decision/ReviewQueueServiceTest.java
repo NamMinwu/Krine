@@ -1,7 +1,7 @@
 package com.krine.decision;
 
 import com.krine.decision.dto.ReviewQueueItem;
-import com.krine.decision.enums.ChallengeResolution;
+import com.krine.decision.enums.ObjectionResolution;
 import com.krine.decision.enums.ConditionType;
 import com.krine.decision.enums.DecisionStatus;
 import org.junit.jupiter.api.Test;
@@ -30,8 +30,8 @@ class ReviewQueueServiceTest {
         active.getConditions().add(Condition.builder().text("미래 조건").type(ConditionType.DATE)
                 .dueDate(LocalDate.of(2026, 12, 1)).build());              // 미래 → 제외
         active.getConditions().add(Condition.builder().text("기기 고장").type(ConditionType.EVENT).build()); // 체크인 → 포함
-        active.getChallenges().add(Challenge.builder().objection("더 좋은 모델이 나올 수 있다")
-                .resolution(ChallengeResolution.DEFERRED).build());        // 보류 → 포함
+        active.getObjections().add(Objection.builder().objection("더 좋은 모델이 나올 수 있다")
+                .resolution(ObjectionResolution.DEFERRED).build());        // 보류 → 포함
         repository.save(active);
 
         Decision draft = Decision.builder().title("작성중").status(DecisionStatus.DRAFT).build();
@@ -42,7 +42,7 @@ class ReviewQueueServiceTest {
         List<ReviewQueueItem> items = queue.getQueue(LocalDate.of(2026, 8, 20));
 
         assertThat(items).extracting(ReviewQueueItem::kind)
-                .containsExactlyInAnyOrder("DUE_DATE", "EVENT_CHECKIN", "DEFERRED_CHALLENGE");
+                .containsExactlyInAnyOrder("DUE_DATE", "EVENT_CHECKIN", "DEFERRED_OBJECTION");
         assertThat(items).extracting(ReviewQueueItem::text)
                 .contains("약정 만료", "기기 고장", "더 좋은 모델이 나올 수 있다");
     }

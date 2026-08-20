@@ -64,7 +64,7 @@ public class Decision {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "decision_id")
     @Builder.Default
-    private List<Challenge> challenges = new ArrayList<>();
+    private List<Objection> objections = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "decision_id")

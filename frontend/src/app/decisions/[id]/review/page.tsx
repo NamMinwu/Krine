@@ -41,9 +41,9 @@ function ReviewContent() {
     refId !== null && (kind === "DUE_DATE" || kind === "EVENT_CHECKIN")
       ? decision.conditions.find((c) => c.id === refId)
       : null;
-  const deferredChallenge =
-    refId !== null && kind === "DEFERRED_CHALLENGE"
-      ? decision.challenges.find((c) => c.id === refId)
+  const deferredObjection =
+    refId !== null && kind === "DEFERRED_OBJECTION"
+      ? decision.objections.find((c) => c.id === refId)
       : null;
 
   const submit = async () => {
@@ -51,9 +51,9 @@ function ReviewContent() {
       return;
     }
     // 보류했던 반론에서 온 재검토라면 반론도 함께 종결한다
-    if (deferredChallenge) {
-      await decisionApi.resolveChallenge(
-        deferredChallenge.id,
+    if (deferredObjection) {
+      await decisionApi.resolveObjection(
+        deferredObjection.id,
         verdict === "MAINTAINED" ? "DEFENDED" : "REVISED",
       );
     }
@@ -120,10 +120,10 @@ function ReviewContent() {
         )}
       </section>
 
-      {deferredChallenge && (
+      {deferredObjection && (
         <section className="mt-3 rounded-2xl border border-warn/30 bg-warn-soft p-4">
           <p className="text-xs text-warn">그때 답 못 한 반박, 지금은요?</p>
-          <p className="mt-1 text-sm">{deferredChallenge.objection}</p>
+          <p className="mt-1 text-sm">{deferredObjection.objection}</p>
         </section>
       )}
 

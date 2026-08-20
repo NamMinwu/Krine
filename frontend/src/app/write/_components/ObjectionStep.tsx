@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
-import type { ChallengeResult } from "@/domains/decision/types";
+import type { ObjectionResult } from "@/domains/decision/types";
 import StepShell from "./StepShell";
 
 type Phase = "intro" | "objection" | "reflect" | "resolving";
 
-export default function ChallengeStep({
+export default function ObjectionStep({
   decisionId,
   onRevise,
   onDone,
@@ -17,17 +17,17 @@ export default function ChallengeStep({
   onDone: () => void;
 }) {
   const [phase, setPhase] = useState<Phase>("intro");
-  const [challenge, setChallenge] = useState<ChallengeResult | null>(null);
+  const [objection, setObjection] = useState<ObjectionResult | null>(null);
   const [answer, setAnswer] = useState("");
   const [reflectBack, setReflectBack] = useState("");
   const [isBusy, setIsBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const startChallenge = async () => {
+  const startObjection = async () => {
     setIsBusy(true);
     try {
-      const result = await decisionApi.challenge(decisionId);
-      setChallenge(result);
+      const result = await decisionApi.objection(decisionId);
+      setObjection(result);
       setAnswer("");
       setReflectBack("");
       setNotice(null);
@@ -38,12 +38,12 @@ export default function ChallengeStep({
   };
 
   const submitAnswer = async () => {
-    if (!challenge) {
+    if (!objection) {
       return;
     }
     setIsBusy(true);
     try {
-      const result = await decisionApi.answerChallenge(challenge.challengeId, answer.trim());
+      const result = await decisionApi.answerObjection(objection.objectionId, answer.trim());
       setReflectBack(result.reflectBack);
       setPhase("reflect");
     } finally {
@@ -52,12 +52,12 @@ export default function ChallengeStep({
   };
 
   const resolve = async (resolution: "DEFENDED" | "REVISED" | "DEFERRED") => {
-    if (!challenge) {
+    if (!objection) {
       return;
     }
     setIsBusy(true);
     try {
-      await decisionApi.resolveChallenge(challenge.challengeId, resolution);
+      await decisionApi.resolveObjection(objection.objectionId, resolution);
       if (resolution === "REVISED") {
         onRevise();
         return;
@@ -65,7 +65,7 @@ export default function ChallengeStep({
       if (resolution === "DEFERRED") {
         setNotice("이 반론은 보류로 저장했어요. 재검토 때 다시 만나요.");
       }
-      if (challenge.remaining > 0) {
+      if (objection.remaining > 0) {
         setPhase("resolving");
       } else {
         onDone();
@@ -86,7 +86,7 @@ export default function ChallengeStep({
           <button
             type="button"
             disabled={isBusy}
-            onClick={startChallenge}
+            onClick={startObjection}
             className="w-full rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
             ⚔️ 다른 관점에서 검토해보기
@@ -111,7 +111,7 @@ export default function ChallengeStep({
           <button
             type="button"
             disabled={isBusy}
-            onClick={startChallenge}
+            onClick={startObjection}
             className="w-full rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
             다음 반론 보기
@@ -129,9 +129,9 @@ export default function ChallengeStep({
   }
 
   return (
-    <StepShell stepNo={4} title={challenge?.perspective ?? ""}>
+    <StepShell stepNo={4} title={objection?.perspective ?? ""}>
       <div className="rounded-2xl border border-line bg-surface p-4">
-        <p className="text-[15px] leading-relaxed">{challenge?.objection}</p>
+        <p className="text-[15px] leading-relaxed">{objection?.objection}</p>
       </div>
 
       {phase === "objection" && (

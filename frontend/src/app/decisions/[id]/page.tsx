@@ -107,22 +107,22 @@ export default function DecisionDetailPage() {
         </section>
       )}
 
-      {decision.challenges.length > 0 && (
+      {decision.objections.length > 0 && (
         <section className="rounded-2xl border border-line bg-surface p-4">
           <h2 className="text-xs font-semibold text-ink-soft">⚔️ 검토한 반대 관점</h2>
           <ul className="mt-2 space-y-3">
-            {decision.challenges.map((challenge) => (
-              <li key={challenge.id} className="border-l-2 border-line pl-3">
-                <p className="text-xs text-ink-soft">{challenge.perspective}</p>
-                <p className="mt-0.5 text-sm">{challenge.objection}</p>
-                {challenge.userAnswer && (
+            {decision.objections.map((objection) => (
+              <li key={objection.id} className="border-l-2 border-line pl-3">
+                <p className="text-xs text-ink-soft">{objection.perspective}</p>
+                <p className="mt-0.5 text-sm">{objection.objection}</p>
+                {objection.userAnswer && (
                   <p className="mt-1.5 text-sm">
                     <span className="text-xs text-accent">나의 답변 — </span>
-                    {challenge.userAnswer}
+                    {objection.userAnswer}
                   </p>
                 )}
                 <span className="mt-1 inline-block rounded-full bg-bg px-2 py-0.5 text-xs text-ink-soft">
-                  {RESOLUTION_LABELS[challenge.resolution]}
+                  {RESOLUTION_LABELS[objection.resolution]}
                 </span>
               </li>
             ))}
