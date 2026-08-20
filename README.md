@@ -48,7 +48,7 @@ GEMINI_API_KEY=your-key
 | `OPENAI_API_KEY` | (없음) | 있으면 GPT 사용 (Gemini 키가 없을 때) |
 | `LLM_PROVIDER` | `auto` | `gemini` / `openai` / `mock` 강제 지정 가능 |
 | `GEMINI_MODEL` | `gemini-3.6-flash` | |
-| `OPENAI_MODEL` | `gpt-4o` | |
+| `OPENAI_MODEL` | `gpt-4o-mini` | |
 
 LLM은 `LlmPort` 인터페이스 뒤에 있어 provider를 설정만으로 교체할 수 있습니다.
 
