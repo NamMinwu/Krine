@@ -78,13 +78,14 @@ class FlowServiceTest {
     }
 
     @Test
-    void 반론은_2개까지만_생성된다() {
+    void 반박은_제한_없이_계속_받을_수_있다() {
         Long id = decisions.createDraft("고민").getId();
         flow.structureDraft(id);
-        ObjectionResult c1 = flow.objection(id);
-        assertThat(c1.remaining()).isEqualTo(1);
-        ObjectionResult c2 = flow.objection(id);
-        assertThat(c2.remaining()).isEqualTo(0);
+        flow.objection(id);
+        flow.objection(id);
+        ObjectionResult third = flow.objection(id);
+        assertThat(third.objectionId()).isNotNull();
+        assertThat(decisions.get(id).getObjections()).hasSize(3);
     }
 
     @Test

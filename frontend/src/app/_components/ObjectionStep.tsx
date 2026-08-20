@@ -89,11 +89,12 @@ export default function ObjectionStep({
 
   if (phase === "intro") {
     return (
-      <StepShell stepNo={stepNo} title="다른 관점에서 검토해볼까요?">
+      <StepShell stepNo={stepNo} title="이 판단, 반박해볼까요?">
         {notice && <p className="mb-3 rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">{notice}</p>}
         <p className="text-sm text-ink-soft">
-          제가 반론을 하나씩 던질게요. 답은 당신이 씁니다. 결론이 바뀌지 않아도
-          좋아요 — 판단의 이유가 또렷해지는 것이 목적이에요.
+          확신할수록 의심해볼 가치가 있어요. 제가 전제를 반박하면, 재반박은
+          당신의 몫입니다. 결론이 바뀌지 않아도 좋아요 — 이유가 또렷해지면
+          성공이에요.
         </p>
         <div className="mt-auto space-y-2 pt-6">
           <button
@@ -102,7 +103,7 @@ export default function ObjectionStep({
             onClick={startObjection}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
-            <Swords size={16} aria-hidden /> 다른 관점에서 검토해보기
+            <Swords size={16} aria-hidden /> 반박 받기
           </button>
           <button
             type="button"
@@ -118,7 +119,7 @@ export default function ObjectionStep({
 
   if (phase === "resolving") {
     return (
-      <StepShell stepNo={stepNo} title="한 가지 관점이 더 있어요">
+      <StepShell stepNo={stepNo} title="반박을 이어갈까요?">
         {notice && <p className="text-sm text-warn">{notice}</p>}
         <div className="mt-auto space-y-2 pt-6">
           <button
@@ -127,7 +128,7 @@ export default function ObjectionStep({
             onClick={startObjection}
             className="w-full rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
-            다음 반론 보기
+            다른 반박 받기
           </button>
           <button
             type="button"
@@ -162,7 +163,7 @@ export default function ObjectionStep({
             onClick={submitAnswer}
             className="mt-3 w-full rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
-            {isBusy ? "듣고 있어요…" : "답하기"}
+            {isBusy ? "듣고 있어요…" : "재반박하기"}
           </button>
         </div>
       )}
@@ -172,7 +173,7 @@ export default function ObjectionStep({
           <div className="mt-3 rounded-2xl bg-accent-soft p-4">
             <p className="text-sm text-accent">{reflectBack}</p>
           </div>
-          <p className="mt-4 text-sm text-ink-soft">이 반론, 어떻게 마무리할까요?</p>
+          <p className="mt-4 text-sm text-ink-soft">이 반박, 어떻게 마무리할까요?</p>
           <div className="mt-2 space-y-2">
             <button
               type="button"

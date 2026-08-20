@@ -29,7 +29,6 @@ import java.util.List;
 @Transactional
 public class FlowService {
     static final int MAX_QUESTIONS = 4;
-    static final int MAX_OBJECTIONS = 2;
 
     private final LlmPort llm;
     private final DecisionService decisions;
@@ -86,10 +85,8 @@ public class FlowService {
 
     public ObjectionResult objection(Long id) {
         Decision d = decisions.get(id);
+        // 반박은 무제한 — 의구심은 소진되지 않는다. 이어갈지는 매번 사용자가 정한다.
         int count = d.getObjections().size();
-        if (count >= MAX_OBJECTIONS) {
-            throw new InvalidStateException("반론은 " + MAX_OBJECTIONS + "개까지만 제시합니다");
-        }
         String existing = d.getObjections().stream()
                 .map(Objection::getObjection)
                 .reduce("", (a, b) -> a + "\n- " + b);
@@ -105,8 +102,7 @@ public class FlowService {
         d.setFlowStep(FlowStep.OBJECTION);
         // 관리 중인 엔티티이므로 flush로 cascade persist — 같은 인스턴스에 id가 할당된다
         repository.flush();
-        return new ObjectionResult(objection.getId(), c.perspective(), c.objection(),
-                MAX_OBJECTIONS - d.getObjections().size());
+        return new ObjectionResult(objection.getId(), c.perspective(), c.objection(), 1);
     }
 
     public AnswerResult answerObjection(Long objectionId, String answer) {

@@ -124,7 +124,7 @@ export default function DecisionDetailPage() {
 
       {decision.objections.length > 0 && (
         <section className="rounded-2xl border border-line bg-surface p-4">
-          <h2 className="flex items-center gap-1 text-xs font-semibold text-ink-soft"><Swords size={13} aria-hidden /> 검토한 반대 관점</h2>
+          <h2 className="flex items-center gap-1 text-xs font-semibold text-ink-soft"><Swords size={13} aria-hidden /> 반박과 재반박</h2>
           <ul className="mt-2 space-y-3">
             {decision.objections.map((objection) => (
               <li key={objection.id} className="border-l-2 border-line pl-3">
@@ -152,12 +152,12 @@ export default function DecisionDetailPage() {
         </section>
       )}
 
-      {decision.status === "ACTIVE" && decision.objections.length < 2 && (
+      {decision.status === "ACTIVE" && (
         <Link
           href={`/decisions/${decision.id}/objection`}
           className="flex items-center justify-center gap-2 rounded-xl bg-accent py-3 text-center font-semibold text-white"
         >
-          <Swords size={16} aria-hidden /> 다른 관점에서 검토받기
+          <Swords size={16} aria-hidden /> 반박 받기
         </Link>
       )}
       {decision.status === "ACTIVE" && (
