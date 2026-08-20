@@ -1,7 +1,7 @@
 "use client";
 
 import type { DiscoverResult } from "@/domains/decision/types";
-import StepShell from "./StepShell";
+import StepShell from "@/app/_components/StepShell";
 
 export default function DiscoverStep({
   result,

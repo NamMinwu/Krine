@@ -9,12 +9,12 @@ import type {
   StructureDraft,
   StructureInput,
 } from "@/domains/decision/types";
-import ObjectionStep from "./_components/ObjectionStep";
+import ObjectionStep from "@/app/_components/ObjectionStep";
 import DiaryStep from "./_components/DiaryStep";
 import DiscoverStep from "./_components/DiscoverStep";
 import QuestionStep from "./_components/QuestionStep";
 import ReflectionStep from "./_components/ReflectionStep";
-import StepShell from "./_components/StepShell";
+import StepShell from "@/app/_components/StepShell";
 import StructureStep from "./_components/StructureStep";
 
 type Step =

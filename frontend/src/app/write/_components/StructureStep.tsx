@@ -8,10 +8,11 @@ import type {
 } from "@/domains/decision/types";
 import ComparisonTable, { type OptionField } from "@/app/_components/ComparisonTable";
 import EditSheet from "./EditSheet";
-import StepShell from "./StepShell";
+import StepShell from "@/app/_components/StepShell";
 
 type EditTarget =
   | { kind: "situation" }
+  | { kind: "tag" }
   | { kind: "criteria" }
   | { kind: "cell"; optionIndex: number; field: OptionField }
   | { kind: "condition"; index: number };
@@ -59,6 +60,8 @@ export default function StructureStep({
     switch (editing.kind) {
       case "situation":
         return { title: "판단의 배경", value: structure.situation ?? "" };
+      case "tag":
+        return { title: "주제 태그", value: structure.topicTag ?? "", hint: "한 단어로 (예: 업무, 건강, 소비)" };
       case "criteria":
         return {
           title: "판단 기준",
@@ -90,6 +93,8 @@ export default function StructureStep({
       switch (editing.kind) {
         case "situation":
           return { ...s, situation: value.trim() };
+        case "tag":
+          return { ...s, topicTag: value.trim() };
         case "criteria":
           return { ...s, criteria: lines };
         case "cell": {
@@ -130,7 +135,16 @@ export default function StructureStep({
       </p>
 
       <section className="mt-4 rounded-2xl border border-line bg-surface p-4">
-        <h2 className="text-base font-bold">{structure.title}</h2>
+        <div className="flex items-start justify-between gap-2">
+          <h2 className="text-base font-bold">{structure.title}</h2>
+          <button
+            type="button"
+            onClick={() => setEditing({ kind: "tag" })}
+            className="shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-xs text-accent"
+          >
+            {structure.topicTag || "태그"} ✏️
+          </button>
+        </div>
         <button
           type="button"
           onClick={() => setEditing({ kind: "situation" })}

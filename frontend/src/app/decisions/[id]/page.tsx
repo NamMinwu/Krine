@@ -145,6 +145,14 @@ export default function DecisionDetailPage() {
         </section>
       )}
 
+      {decision.status === "ACTIVE" && decision.objections.length < 2 && (
+        <Link
+          href={`/decisions/${decision.id}/objection`}
+          className="block rounded-xl bg-accent py-3 text-center font-semibold text-white"
+        >
+          ⚔️ 다른 관점에서 검토받기
+        </Link>
+      )}
       {decision.status === "ACTIVE" && (
         <Link
           href={`/decisions/${decision.id}/review`}

@@ -4,19 +4,19 @@ import Link from "next/link";
 import { greeting } from "@/domains/decision/labels";
 import { useDecisions, useReviewQueue } from "@/domains/decision/queries";
 import RecallChips from "./_components/RecallChips";
-import RecentDecisions from "./_components/RecentDecisions";
 import ReviewQueueCard from "./_components/ReviewQueueCard";
 
 export default function HomePage() {
   const { data: queue = [] } = useReviewQueue();
   const { data: decisions = [] } = useDecisions();
   const draft = decisions.find((d) => d.status === "DRAFT" && d.flowStep !== "DONE");
+  const activeCount = decisions.filter((d) => d.status === "ACTIVE").length;
 
   return (
-    <main className="space-y-6 px-5 pt-10">
+    <main className="space-y-6 px-5 pt-12">
       <header>
         <p className="text-sm text-ink-soft">{greeting()}</p>
-        <h1 className="mt-1 text-xl font-bold">오늘 하루를 돌아볼까요?</h1>
+        <h1 className="mt-1 text-xl font-bold">오늘 어떤 선택을 했나요?</h1>
       </header>
 
       <ReviewQueueCard items={queue} />
@@ -34,10 +34,6 @@ export default function HomePage() {
       )}
 
       <section className="space-y-3">
-        <h2 className="font-semibold">오늘 어떤 선택을 했나요?</h2>
-        <p className="text-sm text-ink-soft">
-          큰 결정이 아니어도 좋아요. 다시 생각해보고 싶은 순간이면 충분해요.
-        </p>
         <RecallChips />
         <Link
           href="/write"
@@ -47,10 +43,14 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <RecentDecisions
-        decisions={decisions}
-        pendingReviews={queue.length}
-      />
+      {activeCount > 0 && (
+        <Link
+          href="/archive"
+          className="block text-center text-sm text-ink-soft underline underline-offset-4"
+        >
+          내 판단 {activeCount}개 모아보기
+        </Link>
+      )}
     </main>
   );
 }

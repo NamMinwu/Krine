@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { NextQuestion } from "@/domains/decision/types";
-import StepShell from "./StepShell";
+import StepShell from "@/app/_components/StepShell";
 
 export default function QuestionStep({
   question,

@@ -69,8 +69,16 @@ public class FlowService {
 
     public StructureDraft structureDraft(Long id) {
         Decision d = decisions.get(id);
+        String existingTags = repository.findAll().stream()
+                .map(Decision::getTopicTag)
+                .filter(t -> t != null && !t.isBlank())
+                .distinct()
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("없음");
         String out = llm.generate(Prompts.GUARDRAILS + Prompts.STRUCTURE,
-                "[STRUCTURE]\n오늘 날짜: " + LocalDate.now() + "\n대화:\n" + transcriptOf(d));
+                "[STRUCTURE]\n오늘 날짜: " + LocalDate.now()
+                        + "\n기존 주제 태그: " + existingTags
+                        + "\n대화:\n" + transcriptOf(d));
         StructureDraft draft = JsonUtil.parse(out, StructureDraft.class);
         d.setFlowStep(FlowStep.STRUCTURE);
         return draft;

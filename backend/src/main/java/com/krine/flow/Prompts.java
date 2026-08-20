@@ -38,7 +38,8 @@ public final class Prompts {
             - 날짜로 환원 가능한 조건(예: "약정이 5개월 남음", "다음 분기에")은 type을 "DATE"로 하고 dueDate(YYYY-MM-DD)를 계산해라. 오늘 날짜는 프롬프트에 준다.
             - 발생 여부를 사용자만 아는 사건(예: "기기가 고장 나면")은 type을 "EVENT"로 하고 dueDate는 null.
             DATE 조건이 하나도 없으면 suggestedReviewDate에 오늘+30일을 넣어라. 있으면 null.
-            topicTag는 업무/구매/관계/커리어/생활 중 하나.
+            topicTag는 판단의 주제를 나타내는 한 단어다. '기존 주제 태그' 목록에 의미가 같은 것이 있으면
+            반드시 그것을 그대로 재사용하고, 없을 때만 새로운 한 단어 태그를 만들어라.
             아래 JSON만 출력해라:
             {"title": "...", "situation": "...", "topicTag": "...", "criteria": ["..."],
              "options": [{"label": "...", "gains": ["..."], "sacrifices": ["..."], "premises": ["..."]}],

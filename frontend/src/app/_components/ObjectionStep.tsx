@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
 import type { ObjectionResult } from "@/domains/decision/types";
-import StepShell from "./StepShell";
+import StepShell from "@/app/_components/StepShell";
 
 type Phase = "intro" | "objection" | "reflect" | "resolving";
 
 export default function ObjectionStep({
   decisionId,
+  stepNo = 4,
   onRevise,
   onDone,
 }: {
   decisionId: number;
+  stepNo?: number | null;
   onRevise: () => void;
   onDone: () => void;
 }) {
@@ -77,7 +79,7 @@ export default function ObjectionStep({
 
   if (phase === "intro") {
     return (
-      <StepShell stepNo={4} title="다른 관점에서 검토해볼까요?">
+      <StepShell stepNo={stepNo} title="다른 관점에서 검토해볼까요?">
         <p className="text-sm text-ink-soft">
           제가 반론을 하나씩 던질게요. 답은 당신이 씁니다. 결론이 바뀌지 않아도
           좋아요 — 판단의 이유가 또렷해지는 것이 목적이에요.
@@ -105,7 +107,7 @@ export default function ObjectionStep({
 
   if (phase === "resolving") {
     return (
-      <StepShell stepNo={4} title="한 가지 관점이 더 있어요">
+      <StepShell stepNo={stepNo} title="한 가지 관점이 더 있어요">
         {notice && <p className="text-sm text-warn">{notice}</p>}
         <div className="mt-auto space-y-2 pt-6">
           <button
@@ -129,7 +131,7 @@ export default function ObjectionStep({
   }
 
   return (
-    <StepShell stepNo={4} title={objection?.perspective ?? ""}>
+    <StepShell stepNo={stepNo} title={objection?.perspective ?? ""}>
       <div className="rounded-2xl border border-line bg-surface p-4">
         <p className="text-[15px] leading-relaxed">{objection?.objection}</p>
       </div>
