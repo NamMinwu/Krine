@@ -44,6 +44,24 @@ function ReviewContent() {
     setNewConclusion("");
   }, [id, kind, refId]);
 
+  // 큐에서 지금 항목의 위치 (수동 진입이면 -1 → 카운터 숨김)
+  const queueIndex = queue.findIndex(
+    (item) => item.decisionId === id && item.kind === kind && item.refId === refId,
+  );
+  const progress = queueIndex >= 0 && (
+    <span className="text-xs text-ink-soft">
+      재검토 {queueIndex + 1} / {queue.length}
+    </span>
+  );
+  const progressBar = queueIndex >= 0 && queue.length > 1 && (
+    <div className="mt-3 h-1 w-full rounded-full bg-line">
+      <div
+        className="h-1 rounded-full bg-warn transition-all"
+        style={{ width: `${((queueIndex + 1) / queue.length) * 100}%` }}
+      />
+    </div>
+  );
+
   // "한 번에 하나씩, 이어서" — 지금 항목을 제외한 다음 큐 항목으로 이동
   const goNext = () => {
     const next = queue.find(
@@ -95,9 +113,13 @@ function ReviewContent() {
   if (phase === "check" && condition) {
     return (
       <main className="flex min-h-dvh flex-col px-5 pb-8 pt-6">
-        <button type="button" onClick={() => router.push("/")} className="self-start text-ink-soft">
-          ←
-        </button>
+        <div className="flex w-full items-center justify-between">
+          <button type="button" onClick={() => router.push("/")} className="text-ink-soft">
+            ←
+          </button>
+          {progress}
+        </div>
+        {progressBar}
         <h1 className="font-display mt-6 text-xl font-semibold leading-snug">{decision.title}</h1>
         <div className="mt-4 rounded-2xl border border-warn/30 bg-warn-soft p-4">
           <p className="text-sm">
@@ -128,9 +150,13 @@ function ReviewContent() {
 
   return (
     <main className="flex min-h-dvh flex-col px-5 pb-8 pt-6">
-      <button type="button" onClick={() => router.back()} className="self-start text-ink-soft">
-        ←
-      </button>
+      <div className="flex w-full items-center justify-between">
+        <button type="button" onClick={() => router.back()} className="text-ink-soft">
+          ←
+        </button>
+        {progress}
+      </div>
+      {progressBar}
       <h1 className="font-display mt-6 text-xl font-semibold leading-snug">{decision.title}</h1>
 
       <section className="mt-4 rounded-2xl border border-line bg-surface p-4">
