@@ -18,7 +18,6 @@ const STATUS_FILTERS = [
 function ArchiveContent() {
   const router = useRouter();
   const params = useSearchParams();
-  const tagFilter = params.get("tag");
   const statusFilter = params.get("status") ?? "all";
 
   const { data: decisions = [] } = useDecisions();
@@ -26,10 +25,8 @@ function ArchiveContent() {
   const dueIds = new Set(queue.map((item) => item.decisionId));
 
   const active = decisions.filter((d) => d.status === "ACTIVE");
-  const tags = [...new Set(active.map((d) => d.topicTag).filter(Boolean))] as string[];
 
   const filtered = active
-    .filter((d) => (tagFilter ? d.topicTag === tagFilter : true))
     .filter((d) => {
       if (statusFilter === "all") {
         return true;
@@ -41,7 +38,7 @@ function ArchiveContent() {
     })
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
-  const setParam = (key: "tag" | "status", value: string | null) => {
+  const setParam = (key: "status", value: string | null) => {
     const next = new URLSearchParams(params.toString());
     if (value === null) {
       next.delete(key);
@@ -57,32 +54,6 @@ function ArchiveContent() {
         <h1 className="text-xl font-bold">나의 판단</h1>
         <p className="mt-1 text-sm text-ink-soft">전체 {active.length}개</p>
       </header>
-
-      <div className="flex flex-wrap gap-1.5">
-        <button
-          type="button"
-          onClick={() => setParam("tag", null)}
-          className={`rounded-full px-3 py-1 text-xs ${
-            !tagFilter ? "bg-accent text-white" : "border border-line bg-surface text-ink-soft"
-          }`}
-        >
-          모든 주제
-        </button>
-        {tags.map((tag) => (
-          <button
-            key={tag}
-            type="button"
-            onClick={() => setParam("tag", tag === tagFilter ? null : tag)}
-            className={`rounded-full px-3 py-1 text-xs ${
-              tagFilter === tag
-                ? "bg-accent text-white"
-                : "border border-line bg-surface text-ink-soft"
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
 
       <div className="flex flex-wrap gap-1.5">
         {STATUS_FILTERS.map((filter) => (
