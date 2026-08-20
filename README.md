@@ -83,11 +83,9 @@ cd frontend && npm install && npm run dev
 
 | 뺀 것 | 이유 |
 |---|---|
-| 공유·피드·투표 | 유저 수에 의존하는 외재적 리텐션(콜드 스타트). 내 데이터가 나를 부르는 내재적 루프로 대체 |
-| 스트릭·연속 기록 배지 | 레퍼런스 리서치 결과 신규 사용자 이탈을 막지 못하고, 깊이 중심 제품에 피상적 참여만 유인 |
-| AI 멘토 페르소나 | 판단을 외부 권위에 미루게 함 — "자기 기준 강화"와 정반대 |
-| AI 생성 요약·판단 점수화 | 기록의 소유권이 AI로 넘어감. "당신의 판단은 72점"이 아니라 "당신의 판단을 이렇게 이해했습니다" |
-| 선택지별 "핵심 전제" 필드 | 실데이터에서 판단 기준과 중복 생산. 검증 가능한 믿음의 역할은 '판단을 바꿀 조건'(반증 시나리오)이 실행 가능한 형태로 수행 |
+| 공유·피드·투표 | 유저 수의 의존으로 인해서 제외 |
+| AI 생성 주간 요약 | 운영을 성립시키는 기능이지만 시간 부족으로 인해서 기각 |
+| 로그인 | 단일 사용자 데모 범위로 제외 |
 
 ---
 
@@ -131,8 +129,6 @@ cd frontend && npm install && npm run dev
 
 즉 이 서비스는 DB보다 **LLM 운영이 먼저 문제가 되는 구조**이며, MVP에서 토큰 로깅과 provider 추상화를 먼저 넣은 이유입니다.
 
-> 상세 기획·설계: [`docs/superpowers/specs/`](docs/superpowers/specs/) (설계 결정 변화 이력 포함), 구현 계획: [`docs/superpowers/plans/`](docs/superpowers/plans/)
-
 ---
 
 ## 기술 스택과 선택 이유
@@ -142,8 +138,6 @@ cd frontend && npm install && npm run dev
 | Backend | Spring Boot 3.5, Java 17, Gradle, Lombok, Spring Data JPA | 가장 빠르게 움직일 수 있는 스택. append-only 버전 모델을 엔티티 설계(`@Setter` 제거)로 강제 |
 | DB | H2 (file) | 외부 의존 없이 심사자 즉시 실행. 단일 사용자 데모에서는 재배포 시 시드 리셋이 오히려 데모 품질을 보장. 확장 시 Postgres 전환 지점 |
 | Frontend | Next.js (App Router), TypeScript, Tailwind CSS, TanStack Query | 모바일 웹 단일 컬럼. 아키텍처 규칙은 [`frontend/RULES.md`](frontend/RULES.md) |
-| LLM | `LlmPort` — Gemini / OpenAI / Mock | provider를 설정만으로 교체. 키 없이도 전체 플로우 동작(심사 환경 보장) |
-| 배포 | Railway(백엔드, Dockerfile) + Vercel(프론트) | 모노레포에서 루트 디렉토리 분리 배포 |
 
 ---
 
@@ -168,11 +162,3 @@ Claude Code로 기획부터 배포까지 진행했습니다.
 **프론트** — [`frontend/RULES.md`](frontend/RULES.md)에 정해놓은 컨벤션(Server State는 TanStack Query, 도메인 분리, 콜로케이션) 기반으로 구현
 
 **백엔드** — 솔루션 토대로 데이터 모델 산출(판단 중심 애그리거트, append-only 버전) 후 **TDD 방식으로 구현** (테스트 먼저 → 실패 확인 → 구현 → 통과 → 커밋, 12건)
-
-### 잘 안 됐던 것
-
-- **AI가 만든 필드를 실데이터로 반박해 제거** — 선택지별 "핵심 전제" 필드가 실제 화면에서 판단 기준과 중복("~인지 여부" vs "~라고 판단함")을 생산하는 걸 발견하고 필드 자체를 제거. AI의 이론적 방어보다 스크린샷 증거가 이겼습니다
-- **LLM은 규칙 없이는 계속 어긋남** — 질문 선택지가 질문의 답이 아닌 것(A vs B 재나열), 반박이 사용자가 채택한 기준 편에 서는 것, 선택지를 구성 요소로 쪼개는 것 등을 화면에서 발견할 때마다 프롬프트에 금지 규칙을 명문화하는 반복이 필요했습니다
-- **프레임워크 버전 사고** — Spring Initializr가 계획(3.x)과 다른 Boot 4.1을 내려줘 수동으로 3.5에 고정
-- **JPA의 함정 2건** — merge가 반환한 복사본과 로컬 참조가 달라 자식 엔티티 id가 null로 남는 버그(→ flush 방식으로 수정), open-in-view=false에서 lazy 컬렉션을 dto가 들고 나가 직렬화 시점에 터진 것(→ 트랜잭션 내 매핑 + 방어적 복사). 모두 첫 실행 테스트에서 검출
-- **LLM 무료 티어 쿼터** — 분당 호출 제한에 플로우 8회 호출이 걸려 429 발생. `Retry-After` 파싱 → 클라이언트 자동 재시도 + "쓰신 내용은 저장되어 있어요" 배너로 UX 복구
