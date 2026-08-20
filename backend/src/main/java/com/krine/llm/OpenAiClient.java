@@ -22,6 +22,22 @@ public class OpenAiClient implements LlmPort {
 
     @Override
     public String generate(String systemPrompt, String userPrompt) {
+        try {
+            return callOnce(systemPrompt, userPrompt);
+        } catch (LlmParseException first) {
+            // 일시적 과부하에 대비한 1회 재시도
+            log.warn("OpenAI 1차 호출 실패, 재시도합니다: {}", first.getMessage());
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw first;
+            }
+            return callOnce(systemPrompt, userPrompt);
+        }
+    }
+
+    private String callOnce(String systemPrompt, String userPrompt) {
         Map<String, Object> body = Map.of(
                 "model", model,
                 "messages", List.of(

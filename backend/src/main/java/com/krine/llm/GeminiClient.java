@@ -22,6 +22,22 @@ public class GeminiClient implements LlmPort {
 
     @Override
     public String generate(String systemPrompt, String userPrompt) {
+        try {
+            return callOnce(systemPrompt, userPrompt);
+        } catch (LlmParseException first) {
+            // 일시적 과부하(503 등)에 대비한 1회 재시도
+            log.warn("Gemini 1차 호출 실패, 재시도합니다: {}", first.getMessage());
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw first;
+            }
+            return callOnce(systemPrompt, userPrompt);
+        }
+    }
+
+    private String callOnce(String systemPrompt, String userPrompt) {
         Map<String, Object> body = Map.of(
                 "system_instruction", Map.of("parts", List.of(Map.of("text", systemPrompt))),
                 "contents", List.of(Map.of("parts", List.of(Map.of("text", userPrompt)))));

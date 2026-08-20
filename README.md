@@ -47,10 +47,12 @@ GEMINI_API_KEY=your-key
 | `GEMINI_API_KEY` | (없음) | 있으면 Gemini 사용 |
 | `OPENAI_API_KEY` | (없음) | 있으면 GPT 사용 (Gemini 키가 없을 때) |
 | `LLM_PROVIDER` | `auto` | `gemini` / `openai` / `mock` 강제 지정 가능 |
-| `GEMINI_MODEL` | `gemini-2.0-flash` | |
+| `GEMINI_MODEL` | `gemini-3.6-flash` | |
 | `OPENAI_MODEL` | `gpt-4o` | |
 
 LLM은 `LlmPort` 인터페이스 뒤에 있어 provider를 설정만으로 교체할 수 있습니다.
+
+> Gemini 무료 티어는 **모델당 하루 20회** 제한이 있습니다. 429(쿼터 초과)가 나면 `.env`에 `GEMINI_MODEL=gemini-2.5-flash`처럼 다른 모델을 지정하면 됩니다(쿼터는 모델별로 분리). 일시적 503은 클라이언트가 1회 자동 재시도합니다.
 
 ### 테스트
 
