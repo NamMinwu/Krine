@@ -12,8 +12,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // 패턴 지원(https://*.vercel.app 등) + 콤마 주변 공백 허용
+        String[] origins = java.util.Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(o -> !o.isEmpty())
+                .toArray(String[]::new);
         registry.addMapping("/api/**")
-                .allowedOrigins(allowedOrigins.split(","))
+                .allowedOriginPatterns(origins)
                 .allowedMethods("*")
                 .exposedHeaders("Retry-After");
     }
