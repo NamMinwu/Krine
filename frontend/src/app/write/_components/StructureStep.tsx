@@ -6,7 +6,7 @@ import type {
   StructureDraft,
   StructureInput,
 } from "@/domains/decision/types";
-import ComparisonTable, { type OptionField } from "./ComparisonTable";
+import ComparisonTable, { type OptionField } from "@/app/_components/ComparisonTable";
 import EditSheet from "./EditSheet";
 import StepShell from "./StepShell";
 

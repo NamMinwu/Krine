@@ -16,6 +16,7 @@ out/
 
 # java / gradle
 backend/build/
+backend/data/
 .gradle/
 *.class
 
