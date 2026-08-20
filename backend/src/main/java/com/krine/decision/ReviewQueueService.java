@@ -25,6 +25,10 @@ public class ReviewQueueService {
             if (d.getStatus() != DecisionStatus.ACTIVE) {
                 continue;
             }
+            if (d.getCheckInDate() != null && !d.getCheckInDate().isAfter(today)) {
+                items.add(new ReviewQueueItem(d.getId(), d.getTitle(), "CHECK_IN",
+                        d.getId(), "다시 보기로 한 날", d.getCheckInDate()));
+            }
             for (Condition c : d.getConditions()) {
                 if (c.getStatus() != ConditionStatus.PENDING) {
                     continue;

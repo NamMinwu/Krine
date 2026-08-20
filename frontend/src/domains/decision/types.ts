@@ -10,7 +10,7 @@ export type Verdict = "INITIAL" | "MAINTAINED" | "REVISED" | "REVERSED";
 export type ConditionType = "DATE" | "EVENT";
 export type ConditionStatus = "PENDING" | "TRIGGERED" | "DISMISSED";
 export type ObjectionResolution = "OPEN" | "DEFENDED" | "REVISED" | "DEFERRED";
-export type QueueKind = "DUE_DATE" | "EVENT_CHECKIN" | "DEFERRED_OBJECTION";
+export type QueueKind = "DUE_DATE" | "EVENT_CHECKIN" | "DEFERRED_OBJECTION" | "CHECK_IN";
 
 export interface DecisionOption {
   id: number | null;
@@ -60,6 +60,7 @@ export interface Decision {
   topicTag: string | null;
   rawDiary: string | null;
   firstExpression: string | null;
+  checkInDate: string | null;
   status: DecisionStatus;
   flowStep: FlowStep;
   criteria: string[];
@@ -127,6 +128,7 @@ export interface StructureInput {
   criteria: string[];
   options: OptionInput[];
   conditions: ConditionInput[];
+  checkInDate: string | null;
 }
 
 export interface StructureDraft extends StructureInput {

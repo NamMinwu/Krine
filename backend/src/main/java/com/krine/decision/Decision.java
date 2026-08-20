@@ -5,6 +5,7 @@ import com.krine.decision.enums.FlowStep;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class Decision {
 
     @Column(length = 1000)
     private String firstExpression;
+
+    // 조건과 구분되는 '확인 약속' — 재검토하면 소진된다
+    private LocalDate checkInDate;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default

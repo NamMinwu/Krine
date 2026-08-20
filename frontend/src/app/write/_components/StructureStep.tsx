@@ -36,6 +36,7 @@ export default function StructureStep({
     criteria: draft.criteria,
     options: draft.options,
     conditions: draft.conditions,
+    checkInDate: null,
   });
   const [suggested, setSuggested] = useState(draft.suggestedReviewDate);
   const [editing, setEditing] = useState<EditTarget | null>(null);
@@ -46,13 +47,8 @@ export default function StructureStep({
     if (!suggested) {
       return;
     }
-    setStructure((s) => ({
-      ...s,
-      conditions: [
-        ...s.conditions,
-        { text: "다시 보기로 한 날", type: "DATE", dueDate: suggested },
-      ],
-    }));
+    // 조건이 아니라 '확인 약속'으로 저장한다 — 조건 리스트에 섞이지 않는다
+    setStructure((s) => ({ ...s, checkInDate: suggested }));
     setSuggested(null);
   };
 
@@ -252,7 +248,23 @@ export default function StructureStep({
         </ul>
       </section>
 
-      {suggested && !hasDateCondition && (
+      {structure.checkInDate && (
+        <section className="mt-3 rounded-2xl border border-line bg-surface p-4">
+          <h3 className="text-sm font-semibold">다시 볼 시점</h3>
+          <p className="mt-1.5 text-sm">
+            {structure.checkInDate}에 확인하러 올게요.
+            <button
+              type="button"
+              onClick={() => setStructure((s) => ({ ...s, checkInDate: null }))}
+              className="ml-2 text-xs text-ink-soft underline"
+            >
+              취소
+            </button>
+          </p>
+        </section>
+      )}
+
+      {suggested && !structure.checkInDate && !hasDateCondition && (
         <section className="mt-3 rounded-2xl border border-line bg-surface p-4">
           <h3 className="text-sm font-semibold">다시 볼 시점</h3>
           <p className="mt-1.5 text-sm text-ink-soft">

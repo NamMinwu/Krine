@@ -13,6 +13,7 @@ import java.util.List;
 
 public record DecisionResponse(Long id, String title, String situation, String topicTag,
                                String rawDiary, String firstExpression,
+                               LocalDate checkInDate,
                                String status, String flowStep,
                                List<String> criteria,
                                List<OptionResponse> options,
@@ -62,6 +63,7 @@ public record DecisionResponse(Long id, String title, String situation, String t
         return new DecisionResponse(
                 d.getId(), d.getTitle(), d.getSituation(), d.getTopicTag(),
                 d.getRawDiary(), d.getFirstExpression(),
+                d.getCheckInDate(),
                 d.getStatus().name(), d.getFlowStep().name(),
                 List.copyOf(d.getCriteria()),
                 d.getOptions().stream().map(OptionResponse::from).toList(),

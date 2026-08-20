@@ -8,6 +8,7 @@ export const VERDICT_LABELS: Record<Verdict, { label: string; icon: string; clas
 };
 
 export const QUEUE_KIND_LABELS: Record<QueueKind, string> = {
+  CHECK_IN: "확인하기로 한 날이 되었어요",
   DUE_DATE: "설정한 날이 되었어요",
   EVENT_CHECKIN: "이 조건, 발생했나요?",
   DEFERRED_OBJECTION: "그때 답 못 한 반박이 있어요",

@@ -116,6 +116,11 @@ function ReviewContent() {
             당시 중요하게 본 것 — {decision.criteria.join(", ")}
           </p>
         )}
+        {kind === "CHECK_IN" && (
+          <p className="mt-2 flex items-center gap-1 text-sm text-warn">
+            <Calendar size={13} aria-hidden /> 이 판단을 다시 확인하기로 한 날이에요
+          </p>
+        )}
         {condition && kind === "DUE_DATE" && (
           <p className="mt-2 flex items-center gap-1 text-sm text-warn">
             <Calendar size={13} aria-hidden /> “{condition.text}” 시점이 되었어요

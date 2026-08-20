@@ -30,7 +30,8 @@ class DecisionServiceTest {
                 "기존 방식 유지 vs 새 방식 도입", "일정 압박 상황", "업무",
                 List.of("일정"),
                 List.of(new OptionInput("기존 방식 유지", List.of("일정 준수"), List.of("장기 효율"), List.of("이번 분기 일정이 가장 중요하다"))),
-                List.of(new ConditionInput("다음 분기 일정 여유", "DATE", java.time.LocalDate.now().plusDays(30)))));
+                List.of(new ConditionInput("다음 분기 일정 여유", "DATE", java.time.LocalDate.now().plusDays(30))),
+                null));
         return d.getId();
     }
 
@@ -48,7 +49,7 @@ class DecisionServiceTest {
         Long id = draftWithStructure();
         service.confirm(id, "기존 방식을 유지한다", null);
         assertThatThrownBy(() -> service.updateStructure(id, new StructureInput(
-                "제목 변경", null, null, List.of(), List.of(), List.of())))
+                "제목 변경", null, null, List.of(), List.of(), List.of(), null)))
                 .isInstanceOf(InvalidStateException.class);
     }
 

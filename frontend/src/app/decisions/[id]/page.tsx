@@ -81,6 +81,16 @@ export default function DecisionDetailPage() {
         </section>
       )}
 
+      {decision.checkInDate && (
+        <section className="rounded-2xl border border-line bg-surface p-4">
+          <h2 className="text-xs font-semibold text-ink-soft">다시 볼 시점</h2>
+          <p className="mt-1 flex items-center gap-1.5 text-sm">
+            <Calendar size={13} className="text-accent" aria-hidden />
+            {decision.checkInDate}에 이 판단을 다시 확인하기로 했어요
+          </p>
+        </section>
+      )}
+
       {decision.conditions.length > 0 && (
         <section className="rounded-2xl border border-line bg-surface p-4">
           <h2 className="text-xs font-semibold text-ink-soft">판단을 바꿀 조건</h2>

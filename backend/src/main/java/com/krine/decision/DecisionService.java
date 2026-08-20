@@ -63,6 +63,7 @@ public class DecisionService {
                 .type(ConditionType.valueOf(c.type()))
                 .dueDate(c.dueDate())
                 .build()));
+        d.setCheckInDate(input.checkInDate());
         d.setFlowStep(FlowStep.STRUCTURE);
         d.setUpdatedAt(LocalDateTime.now());
         return repository.saveAndFlush(d);
@@ -92,6 +93,7 @@ public class DecisionService {
         d.getVersions().add(DecisionVersion.builder()
                 .versionNo(d.getVersions().size() + 1)
                 .conclusion(conclusion).verdict(verdict).reason(input.reason()).build());
+        d.setCheckInDate(null); // 확인 약속은 재검토로 소진된다
         if (input.triggeredConditionId() != null) {
             d.getConditions().stream()
                     .filter(c -> c.getId().equals(input.triggeredConditionId()))
