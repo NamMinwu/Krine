@@ -26,9 +26,17 @@ export default function StepShell({
           ←
         </button>
         {stepNo !== null && (
-          <span className="text-xs text-ink-soft">{stepNo} / 5</span>
+          <span className="text-xs text-ink-soft">기록 {stepNo} / 5</span>
         )}
       </header>
+      {stepNo !== null && (
+        <div className="mt-3 h-1 w-full rounded-full bg-line">
+          <div
+            className="h-1 rounded-full bg-accent transition-all"
+            style={{ width: `${(stepNo / 5) * 100}%` }}
+          />
+        </div>
+      )}
       <h1 className="font-display animate-rise mt-6 text-xl font-semibold leading-snug">{title}</h1>
       <div className="animate-rise mt-4 flex flex-1 flex-col">{children}</div>
     </main>
