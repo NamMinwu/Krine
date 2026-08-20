@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+/* Calm Journal × Structured Thinking — 오프화이트 배경, 절제된 색 */
+:root {
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --ink: #1f2937;
+  --ink-soft: #6b7280;
+  --line: #e7e5e1;
+  --accent: #4f6d5a;
+  --accent-soft: #eef2ef;
+  --warn: #b4846c;
+  --warn-soft: #f7efe9;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Pretendard Variable", "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
