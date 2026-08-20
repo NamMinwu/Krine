@@ -6,7 +6,7 @@ import ComparisonTable from "@/app/_components/ComparisonTable";
 import { relativeTime } from "@/domains/decision/labels";
 import { Suspense, useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
-import { useDecision, useReview } from "@/domains/decision/queries";
+import { useDecision, useReview, useReviewQueue } from "@/domains/decision/queries";
 import type { QueueKind } from "@/domains/decision/types";
 
 type ReviewVerdict = "MAINTAINED" | "REVISED" | "REVERSED";
@@ -26,6 +26,7 @@ function ReviewContent() {
   const refId = search.get("ref") ? Number(search.get("ref")) : null;
 
   const { data: decision } = useDecision(id);
+  const { data: queue = [] } = useReviewQueue();
   const review = useReview(id);
 
   const [phase, setPhase] = useState<"check" | "verdict">(
@@ -34,6 +35,28 @@ function ReviewContent() {
   const [verdict, setVerdict] = useState<ReviewVerdict | null>(null);
   const [reason, setReason] = useState("");
   const [newConclusion, setNewConclusion] = useState("");
+
+  // 큐의 다음 항목으로 이어가면 URL만 바뀌므로 화면 상태를 초기화한다
+  useEffect(() => {
+    setPhase(kind === "EVENT_CHECKIN" ? "check" : "verdict");
+    setVerdict(null);
+    setReason("");
+    setNewConclusion("");
+  }, [id, kind, refId]);
+
+  // "한 번에 하나씩, 이어서" — 지금 항목을 제외한 다음 큐 항목으로 이동
+  const goNext = () => {
+    const next = queue.find(
+      (item) => !(item.decisionId === id && item.kind === kind && item.refId === refId),
+    );
+    if (next) {
+      router.push(
+        `/decisions/${next.decisionId}/review?ref=${next.refId}&kind=${next.kind}`,
+      );
+    } else {
+      router.push("/");
+    }
+  };
 
   if (!decision) {
     return <main className="px-5 pt-10 text-sm text-ink-soft">불러오는 중…</main>;
@@ -93,7 +116,7 @@ function ReviewContent() {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/")}
+            onClick={goNext}
             className="w-full rounded-xl border border-line py-3 text-ink-soft"
           >
             아직이에요
