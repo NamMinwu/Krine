@@ -62,12 +62,11 @@ function ReviewContent() {
     </div>
   );
 
-  // "한 번에 하나씩, 이어서" — 지금 항목을 제외한 다음 큐 항목으로 이동
+  // "한 번에 하나씩, 이어서" — 큐의 다음 순번으로 이동, 마지막이면 홈으로.
+  // (건너뛴 항목은 큐에 남지만, 한 바퀴에 한 번씩만 보여준다)
   const goNext = () => {
-    const next = queue.find(
-      (item) => !(item.decisionId === id && item.kind === kind && item.refId === refId),
-    );
-    if (next) {
+    if (queueIndex >= 0 && queueIndex + 1 < queue.length) {
+      const next = queue[queueIndex + 1];
       router.push(
         `/decisions/${next.decisionId}/review?ref=${next.refId}&kind=${next.kind}`,
       );
