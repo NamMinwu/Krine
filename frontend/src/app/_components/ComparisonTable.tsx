@@ -14,9 +14,11 @@ export type OptionField = (typeof ROWS)[number]["key"];
 export default function ComparisonTable({
   options,
   onEditCell,
+  onEditLabel,
 }: {
   options: OptionInput[];
   onEditCell?: (optionIndex: number, field: OptionField) => void;
+  onEditLabel?: (optionIndex: number) => void;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -24,12 +26,16 @@ export default function ComparisonTable({
         <thead>
           <tr>
             <th className="w-20" />
-            {options.map((option) => (
+            {options.map((option, index) => (
               <th
-                key={option.label}
+                key={`${option.label}-${index}`}
                 className="rounded-t-lg bg-accent-soft px-2 py-2 text-center font-semibold text-accent"
+                onClick={() => onEditLabel?.(index)}
               >
                 {option.label}
+                {onEditLabel && (
+                  <Pencil size={10} className="ml-1 inline opacity-60" aria-hidden />
+                )}
               </th>
             ))}
           </tr>

@@ -14,6 +14,8 @@ import StepShell from "@/app/_components/StepShell";
 type EditTarget =
   | { kind: "situation" }
   | { kind: "tag" }
+  | { kind: "addOption" }
+  | { kind: "optionLabel"; index: number }
   | { kind: "criteria" }
   | { kind: "cell"; optionIndex: number; field: OptionField }
   | { kind: "condition"; index: number };
@@ -63,6 +65,10 @@ export default function StructureStep({
         return { title: "판단의 배경", value: structure.situation ?? "" };
       case "tag":
         return { title: "주제 태그", value: structure.topicTag ?? "", hint: "한 단어로 (예: 업무, 건강, 소비)" };
+      case "addOption":
+        return { title: "선택지 추가", value: "", hint: "고민했던 다른 길의 이름 (예: 도입하지 않는다)" };
+      case "optionLabel":
+        return { title: "선택지 이름", value: structure.options[editing.index].label };
       case "criteria":
         return {
           title: "판단 기준",
@@ -96,6 +102,22 @@ export default function StructureStep({
           return { ...s, situation: value.trim() };
         case "tag":
           return { ...s, topicTag: value.trim() };
+        case "addOption": {
+          const label = value.trim();
+          if (!label) {
+            return s;
+          }
+          return {
+            ...s,
+            options: [...s.options, { label, gains: [], sacrifices: [], premises: [] }],
+          };
+        }
+        case "optionLabel": {
+          const options = s.options.map((o, i) =>
+            i === editing.index ? { ...o, label: value.trim() } : o,
+          );
+          return { ...s, options };
+        }
         case "criteria":
           return { ...s, criteria: lines };
         case "cell": {
@@ -185,8 +207,16 @@ export default function StructureStep({
             onEditCell={(optionIndex, field) =>
               setEditing({ kind: "cell", optionIndex, field })
             }
+            onEditLabel={(index) => setEditing({ kind: "optionLabel", index })}
           />
         </div>
+        <button
+          type="button"
+          onClick={() => setEditing({ kind: "addOption" })}
+          className="mt-3 w-full rounded-xl border border-dashed border-line py-2 text-sm text-ink-soft"
+        >
+          ＋ 선택지 추가
+        </button>
       </section>
 
       <section className="mt-3 rounded-2xl border border-line bg-surface p-4">
