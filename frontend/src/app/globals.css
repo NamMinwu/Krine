@@ -1,16 +1,22 @@
 @import "tailwindcss";
 
-/* Calm Journal × Structured Thinking — 오프화이트 배경, 절제된 색 */
+/*
+ * Calm Journal × Structured Thinking
+ * 레퍼런스(Mindsera·Rosebud): 딥 플럼 패널 + 크림 세리프 헤드라인 + 밝은 카드
+ */
 :root {
-  --bg: #faf9f7;
+  --bg: #f9f7f4;
   --surface: #ffffff;
-  --ink: #1f2937;
-  --ink-soft: #6b7280;
-  --line: #e7e5e1;
-  --accent: #4f6d5a;
-  --accent-soft: #eef2ef;
-  --warn: #8f6249; /* 흰 글자 대비 5.2:1 (WCAG AA) */
+  --ink: #26222b; /* 플럼 틴트 잉크 */
+  --ink-soft: #6f6a76;
+  --line: #e8e4ea;
+  --accent: #53415f; /* 딥 플럼 — 흰 글자 대비 9.2:1 */
+  --accent-soft: #f0ebf4;
+  --warn: #8f6249; /* 터라코타 — 흰 글자 대비 5.2:1 */
   --warn-soft: #f7efe9;
+  --hero: #2e2836; /* 히어로 패널 (딥 플럼 차콜) */
+  --hero-ink: #f5f1ea; /* 히어로 위 크림 텍스트 */
+  --hero-ink-soft: #b9b2c0;
 }
 
 @theme inline {
@@ -23,6 +29,9 @@
   --color-accent-soft: var(--accent-soft);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
+  --color-hero: var(--hero);
+  --color-hero-ink: var(--hero-ink);
+  --color-hero-ink-soft: var(--hero-ink-soft);
 }
 
 body {
@@ -31,6 +40,12 @@ body {
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* 세리프 디스플레이 — 헤드라인 전용 (Mindsera·Rosebud의 저널 무드) */
+.font-display {
+  font-family: "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  letter-spacing: -0.01em;
 }
 
 /* 절제된 모션 — 상태 변화를 잇는 최소한의 전환 */

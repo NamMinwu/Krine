@@ -73,7 +73,7 @@ function ReviewContent() {
         <button type="button" onClick={() => router.push("/")} className="self-start text-ink-soft">
           ←
         </button>
-        <h1 className="mt-6 text-lg font-bold leading-snug">{decision.title}</h1>
+        <h1 className="font-display mt-6 text-xl font-semibold leading-snug">{decision.title}</h1>
         <div className="mt-4 rounded-2xl border border-warn/30 bg-warn-soft p-4">
           <p className="text-sm">
             판단을 저장할 때 이렇게 적어두셨어요:
@@ -106,7 +106,7 @@ function ReviewContent() {
       <button type="button" onClick={() => router.back()} className="self-start text-ink-soft">
         ←
       </button>
-      <h1 className="mt-6 text-lg font-bold leading-snug">{decision.title}</h1>
+      <h1 className="font-display mt-6 text-xl font-semibold leading-snug">{decision.title}</h1>
 
       <section className="mt-4 rounded-2xl border border-line bg-surface p-4">
         <p className="text-xs text-ink-soft">당시의 판단</p>

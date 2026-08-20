@@ -52,7 +52,7 @@ function ArchiveContent() {
   return (
     <main className="space-y-4 px-5 pt-10">
       <header>
-        <h1 className="text-xl font-bold">나의 판단</h1>
+        <h1 className="font-display text-xl font-semibold">나의 판단</h1>
         <p className="mt-1 text-sm text-ink-soft">전체 {active.length}개</p>
       </header>
 

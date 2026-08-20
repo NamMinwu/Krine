@@ -14,10 +14,14 @@ export default function HomePage() {
 
   return (
     <main className="space-y-6 px-5 pt-12">
-      <header>
-        <p className="text-lg font-bold tracking-tight text-accent">krine</p>
-        <p className="mt-4 text-sm text-ink-soft">{greeting()}</p>
-        <h1 className="mt-1 text-xl font-bold">오늘 어떤 선택을 했나요?</h1>
+      <header className="animate-rise rounded-3xl bg-hero px-6 py-7">
+        <p className="font-display text-lg font-semibold text-hero-ink">krine</p>
+        <p className="mt-5 text-sm text-hero-ink-soft">{greeting()}</p>
+        <h1 className="font-display mt-1.5 text-[22px] font-semibold leading-snug text-hero-ink">
+          오늘 어떤 선택을
+          <br />
+          했나요?
+        </h1>
       </header>
 
       <ReviewQueueCard items={queue} />

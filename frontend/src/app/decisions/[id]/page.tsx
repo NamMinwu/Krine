@@ -42,7 +42,7 @@ export default function DecisionDetailPage() {
           )}
           <span>{relativeTime(decision.createdAt)}</span>
         </div>
-        <h1 className="mt-2 text-xl font-bold">{decision.title}</h1>
+        <h1 className="font-display mt-2 text-xl font-semibold leading-snug">{decision.title}</h1>
       </header>
 
       {decision.situation && (
