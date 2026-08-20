@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { PenLine } from "lucide-react";
 import { greeting } from "@/domains/decision/labels";
 import { useDecisions, useReviewQueue } from "@/domains/decision/queries";
 import RecallChips from "./_components/RecallChips";
@@ -14,7 +15,8 @@ export default function HomePage() {
   return (
     <main className="space-y-6 px-5 pt-12">
       <header>
-        <p className="text-sm text-ink-soft">{greeting()}</p>
+        <p className="text-lg font-bold tracking-tight text-accent">krine</p>
+        <p className="mt-4 text-sm text-ink-soft">{greeting()}</p>
         <h1 className="mt-1 text-xl font-bold">오늘 어떤 선택을 했나요?</h1>
       </header>
 
@@ -24,9 +26,9 @@ export default function HomePage() {
         <RecallChips />
         <Link
           href="/write"
-          className="block rounded-xl bg-accent py-3 text-center font-semibold text-white"
+          className="flex items-center justify-center gap-2 rounded-xl bg-accent py-3 text-center font-semibold text-white"
         >
-          ✍️ 판단 기록하기
+          <PenLine size={17} aria-hidden /> 판단 기록하기
         </Link>
       </section>
 

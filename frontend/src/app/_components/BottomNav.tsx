@@ -2,16 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Home, Library } from "lucide-react";
 
 const TABS = [
-  { href: "/", label: "홈", icon: "🏠" },
-  { href: "/archive", label: "아카이브", icon: "📚" },
+  { href: "/", label: "홈", icon: Home },
+  { href: "/archive", label: "아카이브", icon: Library },
 ] as const;
 
 export default function BottomNav() {
   const pathname = usePathname();
-  // 기록 스텝 플로우에서는 탭을 숨겨 몰입을 유지한다
-  if (pathname.startsWith("/write")) {
+  // 몰입형 플로우(기록·재검토·반박)에서는 탭을 숨긴다 — CTA 가림 방지
+  if (
+    pathname.startsWith("/write") ||
+    pathname.endsWith("/review") ||
+    pathname.endsWith("/objection")
+  ) {
     return null;
   }
   return (
@@ -28,7 +33,7 @@ export default function BottomNav() {
                 isActive ? "font-semibold text-accent" : "text-ink-soft"
               }`}
             >
-              <span aria-hidden>{tab.icon}</span>
+              <tab.icon size={20} strokeWidth={isActive ? 2.2 : 1.8} aria-hidden />
               {tab.label}
             </Link>
           );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Calendar, Eye, Pencil } from "lucide-react";
 import type {
   ConditionInput,
   StructureDraft,
@@ -142,7 +143,8 @@ export default function StructureStep({
             onClick={() => setEditing({ kind: "tag" })}
             className="shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-xs text-accent"
           >
-            {structure.topicTag || "태그"} ✏️
+            {structure.topicTag || "태그"}{" "}
+            <Pencil size={11} className="inline" aria-hidden />
           </button>
         </div>
         <button
@@ -150,7 +152,8 @@ export default function StructureStep({
           onClick={() => setEditing({ kind: "situation" })}
           className="mt-2 w-full text-left text-sm text-ink-soft"
         >
-          {structure.situation || "판단의 배경을 적어주세요"} ✏️
+          {structure.situation || "판단의 배경을 적어주세요"}{" "}
+          <Pencil size={12} className="inline text-ink-soft" aria-hidden />
         </button>
       </section>
 
@@ -162,7 +165,7 @@ export default function StructureStep({
             onClick={() => setEditing({ kind: "criteria" })}
             className="text-xs text-ink-soft"
           >
-            ✏️ 수정
+            <Pencil size={11} className="mr-0.5 inline" aria-hidden /> 수정
           </button>
         </div>
         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -200,16 +203,19 @@ export default function StructureStep({
                     : "bg-warn-soft text-warn"
                 }`}
               >
-                {condition.type === "DATE"
-                  ? `📅 ${condition.dueDate ?? "시점형"}`
-                  : "👀 사건형"}
+                {condition.type === "DATE" ? (
+                  <><Calendar size={11} className="mr-0.5 inline" aria-hidden />{condition.dueDate ?? "시점형"}</>
+                ) : (
+                  <><Eye size={11} className="mr-0.5 inline" aria-hidden />사건형</>
+                )}
               </button>
               <button
                 type="button"
                 onClick={() => setEditing({ kind: "condition", index })}
                 className="flex-1 text-left text-sm"
               >
-                {condition.text} ✏️
+                {condition.text}{" "}
+                <Pencil size={12} className="inline text-ink-soft" aria-hidden />
               </button>
             </li>
           ))}

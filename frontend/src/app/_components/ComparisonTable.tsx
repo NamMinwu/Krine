@@ -1,5 +1,6 @@
 "use client";
 
+import { Pencil } from "lucide-react";
 import type { OptionInput } from "@/domains/decision/types";
 
 const ROWS = [
@@ -54,7 +55,9 @@ export default function ComparisonTable({
                     )}
                   </ul>
                   {onEditCell && (
-                    <span className="mt-1 block text-xs text-ink-soft">✏️</span>
+                    <span className="mt-1 block text-xs text-ink-soft">
+                      <Pencil size={11} aria-hidden />
+                    </span>
                   )}
                 </td>
               ))}

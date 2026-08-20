@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { Calendar, Eye, Swords } from "lucide-react";
 import ComparisonTable from "@/app/_components/ComparisonTable";
 import { relativeTime } from "@/domains/decision/labels";
 import { useDecision } from "@/domains/decision/queries";
@@ -93,7 +94,11 @@ export default function DecisionDetailPage() {
                       : "bg-warn-soft text-warn"
                   }`}
                 >
-                  {condition.type === "DATE" ? `📅 ${condition.dueDate}` : "👀 사건형"}
+                  {condition.type === "DATE" ? (
+                    <><Calendar size={11} className="mr-0.5 inline" aria-hidden />{condition.dueDate}</>
+                  ) : (
+                    <><Eye size={11} className="mr-0.5 inline" aria-hidden />사건형</>
+                  )}
                 </span>
                 <span className={condition.status === "TRIGGERED" ? "line-through opacity-60" : ""}>
                   {condition.text}
@@ -109,7 +114,7 @@ export default function DecisionDetailPage() {
 
       {decision.objections.length > 0 && (
         <section className="rounded-2xl border border-line bg-surface p-4">
-          <h2 className="text-xs font-semibold text-ink-soft">⚔️ 검토한 반대 관점</h2>
+          <h2 className="flex items-center gap-1 text-xs font-semibold text-ink-soft"><Swords size={13} aria-hidden /> 검토한 반대 관점</h2>
           <ul className="mt-2 space-y-3">
             {decision.objections.map((objection) => (
               <li key={objection.id} className="border-l-2 border-line pl-3">
@@ -140,9 +145,9 @@ export default function DecisionDetailPage() {
       {decision.status === "ACTIVE" && decision.objections.length < 2 && (
         <Link
           href={`/decisions/${decision.id}/objection`}
-          className="block rounded-xl bg-accent py-3 text-center font-semibold text-white"
+          className="flex items-center justify-center gap-2 rounded-xl bg-accent py-3 text-center font-semibold text-white"
         >
-          ⚔️ 다른 관점에서 검토받기
+          <Swords size={16} aria-hidden /> 다른 관점에서 검토받기
         </Link>
       )}
       {decision.status === "ACTIVE" && (

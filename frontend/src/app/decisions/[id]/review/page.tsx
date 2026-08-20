@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Calendar } from "lucide-react";
 import { Suspense, useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
 import { useDecision, useReview } from "@/domains/decision/queries";
@@ -116,7 +117,9 @@ function ReviewContent() {
           </p>
         )}
         {condition && kind === "DUE_DATE" && (
-          <p className="mt-2 text-sm text-warn">📅 “{condition.text}” 시점이 되었어요</p>
+          <p className="mt-2 flex items-center gap-1 text-sm text-warn">
+            <Calendar size={13} aria-hidden /> “{condition.text}” 시점이 되었어요
+          </p>
         )}
       </section>
 

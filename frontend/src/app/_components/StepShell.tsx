@@ -29,8 +29,8 @@ export default function StepShell({
           <span className="text-xs text-ink-soft">{stepNo} / 5</span>
         )}
       </header>
-      <h1 className="mt-6 text-lg font-bold leading-snug">{title}</h1>
-      <div className="mt-4 flex flex-1 flex-col">{children}</div>
+      <h1 className="animate-rise mt-6 text-lg font-bold leading-snug">{title}</h1>
+      <div className="animate-rise mt-4 flex flex-1 flex-col">{children}</div>
     </main>
   );
 }

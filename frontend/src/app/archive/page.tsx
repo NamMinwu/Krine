@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { relativeTime, VERDICT_LABELS } from "@/domains/decision/labels";
+import { Clock } from "lucide-react";
 import { useDecisions, useReviewQueue } from "@/domains/decision/queries";
 import type { Verdict } from "@/domains/decision/types";
 
 const STATUS_FILTERS = [
   { key: "all", label: "전체" },
-  { key: "due", label: "검토 대기 ⏰" },
+  { key: "due", label: "검토 대기" },
   { key: "MAINTAINED", label: "유지 ✓" },
   { key: "REVISED", label: "수정됨 ↻" },
   { key: "REVERSED", label: "뒤집음 ⤴" },
@@ -94,7 +95,11 @@ function ArchiveContent() {
                 <p className="mt-1 flex items-center gap-2 text-xs text-ink-soft">
                   {decision.topicTag && <span>{decision.topicTag}</span>}
                   <span>{relativeTime(decision.updatedAt)}</span>
-                  {dueIds.has(decision.id) && <span className="text-warn">⏰ 검토 대기</span>}
+                  {dueIds.has(decision.id) && (
+                    <span className="flex items-center gap-0.5 text-warn">
+                      <Clock size={11} aria-hidden /> 검토 대기
+                    </span>
+                  )}
                 </p>
               </Link>
             </li>

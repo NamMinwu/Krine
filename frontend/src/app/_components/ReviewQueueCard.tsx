@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Bell } from "lucide-react";
 import { QUEUE_KIND_LABELS } from "@/domains/decision/labels";
 import type { ReviewQueueItem } from "@/domains/decision/types";
 
@@ -11,8 +12,8 @@ export default function ReviewQueueCard({ items }: { items: ReviewQueueItem[] })
   const first = items[0];
   return (
     <section className="rounded-2xl border border-warn/30 bg-warn-soft p-4">
-      <p className="text-sm font-semibold text-warn">
-        🔔 재검토가 도착했어요 ({items.length})
+      <p className="flex items-center gap-1.5 text-sm font-semibold text-warn">
+        <Bell size={15} aria-hidden /> 재검토가 도착했어요 ({items.length})
       </p>
       <div className="mt-3 rounded-xl bg-surface p-3">
         <p className="font-medium">{first.decisionTitle}</p>

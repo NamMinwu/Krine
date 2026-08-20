@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Swords } from "lucide-react";
 import { decisionApi } from "@/domains/decision/api";
 import type { ObjectionResult } from "@/domains/decision/types";
 import StepShell from "@/app/_components/StepShell";
@@ -99,9 +100,9 @@ export default function ObjectionStep({
             type="button"
             disabled={isBusy}
             onClick={startObjection}
-            className="w-full rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 font-semibold text-white disabled:opacity-40"
           >
-            ⚔️ 다른 관점에서 검토해보기
+            <Swords size={16} aria-hidden /> 다른 관점에서 검토해보기
           </button>
           <button
             type="button"

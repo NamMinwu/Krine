@@ -18,7 +18,7 @@ export default function RecallChips() {
           key={chip}
           type="button"
           onClick={() => router.push(`/write?seed=${encodeURIComponent(chip)}`)}
-          className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft"
+          className="min-h-11 rounded-full border border-line bg-surface px-4 text-sm text-ink-soft"
         >
           {chip}
         </button>
