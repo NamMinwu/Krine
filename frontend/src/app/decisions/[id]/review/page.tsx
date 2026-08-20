@@ -1,7 +1,9 @@
 "use client";
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Calendar } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
+import ComparisonTable from "@/app/_components/ComparisonTable";
+import { relativeTime } from "@/domains/decision/labels";
 import { Suspense, useState } from "react";
 import { decisionApi } from "@/domains/decision/api";
 import { useDecision, useReview } from "@/domains/decision/queries";
@@ -109,12 +111,31 @@ function ReviewContent() {
       <h1 className="font-display mt-6 text-xl font-semibold leading-snug">{decision.title}</h1>
 
       <section className="mt-4 rounded-2xl border border-line bg-surface p-4">
-        <p className="text-xs text-ink-soft">당시의 판단</p>
-        <p className="mt-1 font-semibold">{currentVersion?.conclusion}</p>
+        <p className="text-xs text-ink-soft">
+          당시의 기록 · {relativeTime(decision.createdAt)}
+          {decision.versions.length > 1 && ` · v${decision.versions.length}까지 진행`}
+        </p>
+        {decision.situation && (
+          <p className="mt-2 text-sm leading-relaxed">{decision.situation}</p>
+        )}
+        <p className="mt-3 rounded-xl bg-accent-soft px-3 py-2 font-semibold text-accent">
+          {currentVersion?.conclusion}
+        </p>
         {decision.criteria.length > 0 && (
           <p className="mt-2 text-sm text-ink-soft">
-            당시 중요하게 본 것 — {decision.criteria.join(", ")}
+            중요하게 본 것 — {decision.criteria.join(", ")}
           </p>
+        )}
+        {decision.options.length > 0 && (
+          <details className="group mt-3 border-t border-line pt-3">
+            <summary className="flex cursor-pointer list-none items-center gap-1 text-sm text-ink-soft">
+              <ChevronDown size={14} className="transition-transform group-open:rotate-180" aria-hidden />
+              당시의 선택지·전제 보기
+            </summary>
+            <div className="mt-2">
+              <ComparisonTable options={decision.options} />
+            </div>
+          </details>
         )}
         {kind === "CHECK_IN" && (
           <p className="mt-2 flex items-center gap-1 text-sm text-warn">
