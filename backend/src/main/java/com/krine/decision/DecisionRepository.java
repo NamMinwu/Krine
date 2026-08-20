@@ -1,0 +1,6 @@
+package com.krine.decision;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DecisionRepository extends JpaRepository<Decision, Long> {
+}
