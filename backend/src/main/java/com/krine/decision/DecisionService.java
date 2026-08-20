@@ -2,6 +2,8 @@ package com.krine.decision;
 
 import com.krine.common.InvalidStateException;
 import com.krine.common.NotFoundException;
+import com.krine.decision.dto.DecisionResponse;
+import com.krine.decision.dto.DecisionSummaryResponse;
 import com.krine.decision.dto.ReviewInput;
 import com.krine.decision.dto.StructureInput;
 import com.krine.decision.enums.ConditionStatus;
@@ -98,6 +100,33 @@ public class DecisionService {
         }
         d.setUpdatedAt(LocalDateTime.now());
         return repository.saveAndFlush(d);
+    }
+
+    // dto 매핑은 lazy 컬렉션 초기화가 필요하므로 트랜잭션 안에서 수행한다 (open-in-view: false)
+    public DecisionResponse createDraftResponse(String rawDiary) {
+        return DecisionResponse.from(createDraft(rawDiary));
+    }
+
+    @Transactional(readOnly = true)
+    public DecisionResponse getResponse(Long id) {
+        return DecisionResponse.from(get(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<DecisionSummaryResponse> listSummaries() {
+        return list().stream().map(DecisionSummaryResponse::from).toList();
+    }
+
+    public DecisionResponse updateStructureResponse(Long id, StructureInput input) {
+        return DecisionResponse.from(updateStructure(id, input));
+    }
+
+    public DecisionResponse confirmResponse(Long id, String conclusion, String firstExpression) {
+        return DecisionResponse.from(confirm(id, conclusion, firstExpression));
+    }
+
+    public DecisionResponse reviewResponse(Long id, ReviewInput input) {
+        return DecisionResponse.from(review(id, input));
     }
 
     private void requireDraft(Decision d) {
