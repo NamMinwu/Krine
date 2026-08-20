@@ -9,7 +9,10 @@ spring:
       ddl-auto: update
     open-in-view: false
 server:
-  port: 8080
+  port: ${PORT:8080}
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
 llm:
   provider: ${LLM_PROVIDER:auto}   # auto | gemini | openai | mock
   gemini:
