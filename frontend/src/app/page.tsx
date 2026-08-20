@@ -3,14 +3,12 @@
 import Link from "next/link";
 import { PenLine } from "lucide-react";
 import { greeting } from "@/domains/decision/labels";
-import { useDecisions, useReviewQueue } from "@/domains/decision/queries";
+import { useReviewQueue } from "@/domains/decision/queries";
 import RecallChips from "./_components/RecallChips";
 import ReviewQueueCard from "./_components/ReviewQueueCard";
 
 export default function HomePage() {
   const { data: queue = [] } = useReviewQueue();
-  const { data: decisions = [] } = useDecisions();
-  const activeCount = decisions.filter((d) => d.status === "ACTIVE").length;
 
   return (
     <main className="space-y-6 px-5 pt-12">
@@ -36,14 +34,6 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {activeCount > 0 && (
-        <Link
-          href="/archive"
-          className="block text-center text-sm text-ink-soft underline underline-offset-4"
-        >
-          내 판단 {activeCount}개 모아보기
-        </Link>
-      )}
     </main>
   );
 }
