@@ -238,6 +238,13 @@ function ReviewContent() {
       <p className="mt-2 text-center text-xs text-ink-soft">
         원래 판단은 그대로 남고, 위에 새 버전이 쌓여요.
       </p>
+      <button
+        type="button"
+        onClick={goNext}
+        className="mt-1 py-2 text-center text-sm text-ink-soft underline underline-offset-4"
+      >
+        지금은 넘어갈게요
+      </button>
     </main>
   );
 }

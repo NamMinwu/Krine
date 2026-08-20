@@ -25,3 +25,6 @@ backend/data/
 .idea/
 *.iml
 .vscode/
+
+# 작업 문서 (제출 제외)
+docs/
