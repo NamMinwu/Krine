@@ -53,6 +53,7 @@ public class GeminiClient implements LlmPort {
             if (text.isMissingNode()) {
                 throw new LlmParseException("Gemini 응답에 텍스트가 없습니다: " + raw);
             }
+            logUsage(root, userPrompt);
             return text.asText();
         } catch (LlmParseException e) {
             throw e;
@@ -60,5 +61,21 @@ public class GeminiClient implements LlmPort {
             log.error("Gemini 호출 실패", e);
             throw new LlmParseException("Gemini 호출에 실패했습니다", e);
         }
+    }
+
+    // 운영 지표: 호출 단계별 토큰 사용량 (usageMetadata)
+    private void logUsage(JsonNode root, String userPrompt) {
+        JsonNode usage = root.path("usageMetadata");
+        if (usage.isMissingNode()) {
+            return;
+        }
+        String step = userPrompt.startsWith("[")
+                ? userPrompt.substring(0, userPrompt.indexOf(']') + 1)
+                : "[?]";
+        log.info("LLM_USAGE step={} prompt={} output={} total={}",
+                step,
+                usage.path("promptTokenCount").asInt(),
+                usage.path("candidatesTokenCount").asInt(),
+                usage.path("totalTokenCount").asInt());
     }
 }
