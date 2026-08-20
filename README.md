@@ -133,11 +133,13 @@ cd frontend && npm install && npm run dev
 
 ## 기술 스택과 선택 이유
 
+**Next.js와 Spring Boot를 선택한 이유는 단순합니다 — 제가 가장 익숙한 프레임워크이기 때문입니다.** 짧은 기한 안에서 스택 선택의 기준은 "무엇이 더 좋은가"가 아니라 "문제가 생겼을 때 내가 즉시 원인을 찾고 고칠 수 있는가"였습니다. 특히 AI 도구가 코드를 많이 생성하는 작업 방식에서는, 생성된 코드를 제가 읽고 검증하고 직접 수정할 수 있어야 개발 속도와 품질을 모두 통제할 수 있다고 판단했습니다.
+
 | 레이어 | 선택 | 이유 |
 |---|---|---|
-| Backend | Spring Boot 3.5, Java 17, Gradle, Lombok, Spring Data JPA | 가장 빠르게 움직일 수 있는 스택. "판단 이력은 덮어쓰지 않고 쌓기만 한다(append-only)"는 원칙을 엔티티 설계로 강제 |
+| Backend | Spring Boot 3.5, Java 17, Gradle, Lombok, Spring Data JPA | 가장 익숙한 백엔드 스택 — AI가 생성한 코드의 JPA 함정(merge, lazy loading)을 직접 잡아낼 수 있었음. "판단 이력은 덮어쓰지 않고 쌓기만 한다"는 도메인 규칙을 엔티티 설계로 강제 |
 | DB | H2 (file) | 외부 의존 없이 심사자 즉시 실행. 단일 사용자 데모에서는 재배포 시 시드 리셋이 오히려 데모 품질을 보장. 확장 시 Postgres 전환 지점 |
-| Frontend | Next.js (App Router), TypeScript, Tailwind CSS, TanStack Query | 모바일 웹 단일 컬럼. 아키텍처 규칙은 [`frontend/RULES.md`](frontend/RULES.md) |
+| Frontend | Next.js (App Router), TypeScript, Tailwind CSS, TanStack Query | 가장 익숙한 프론트 스택 — 컨벤션을 [`frontend/RULES.md`](frontend/RULES.md)로 먼저 정해두고 AI 생성 코드가 그 규칙 안에서 움직이게 통제 |
 
 ---
 
