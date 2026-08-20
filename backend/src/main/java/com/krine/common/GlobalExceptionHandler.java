@@ -35,6 +35,14 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.fail("AI가 잠시 붐비고 있어요"));
     }
 
+    // API 외 경로(루트, favicon 등) 접근은 조용히 404 — 스택트레이스 없이
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> noResource(
+            org.springframework.web.servlet.resource.NoResourceFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.fail("경로가 없습니다. API는 /api/decisions 에서 시작합니다"));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> internal(Exception e) {
         log.error("Unhandled exception", e);
