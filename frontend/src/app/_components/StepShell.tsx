@@ -57,7 +57,7 @@ export default function StepShell({
           onClick={() => setShowLeaveConfirm(false)}
         >
           <div
-            className="w-full rounded-2xl bg-surface p-5"
+            className="w-full max-w-sm rounded-2xl bg-surface p-5"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="font-semibold">기록을 그만둘까요?</p>

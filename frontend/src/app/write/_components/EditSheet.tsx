@@ -19,7 +19,7 @@ export default function EditSheet({
   return (
     <div className="fixed inset-0 z-20 flex items-end bg-black/30" onClick={onClose}>
       <div
-        className="w-full rounded-t-2xl bg-surface p-5 pb-8"
+        className="mx-auto w-full max-w-md rounded-t-2xl bg-surface p-5 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="font-semibold">{title}</p>
