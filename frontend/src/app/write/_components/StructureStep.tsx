@@ -50,7 +50,7 @@ export default function StructureStep({
       ...s,
       conditions: [
         ...s.conditions,
-        { text: "정기 재검토", type: "DATE", dueDate: suggested },
+        { text: "다시 보기로 한 날", type: "DATE", dueDate: suggested },
       ],
     }));
     setSuggested(null);
@@ -250,28 +250,34 @@ export default function StructureStep({
             </li>
           ))}
         </ul>
-        {suggested && !hasDateCondition && (
-          <div className="mt-3 rounded-xl bg-accent-soft p-3 text-sm">
-            <p>따로 정한 시점이 없다면, {suggested}에 이 판단을 다시 볼까요?</p>
-            <div className="mt-2 flex gap-2">
-              <button
-                type="button"
-                onClick={acceptSuggestedDate}
-                className="rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white"
-              >
-                좋아요
-              </button>
-              <button
-                type="button"
-                onClick={() => setSuggested(null)}
-                className="rounded-lg border border-line bg-surface px-3 py-1.5 text-xs text-ink-soft"
-              >
-                괜찮아요
-              </button>
-            </div>
-          </div>
-        )}
       </section>
+
+      {suggested && !hasDateCondition && (
+        <section className="mt-3 rounded-2xl border border-line bg-surface p-4">
+          <h3 className="text-sm font-semibold">다시 볼 시점</h3>
+          <p className="mt-1.5 text-sm text-ink-soft">
+            {structure.conditions.length > 0
+              ? `위 조건은 언제 일어날지 알 수 없어요. ${suggested}에 조건이 생겼는지 확인하러 올까요?`
+              : `판단을 바꿀 조건이 없다면, ${suggested}에 이 판단이 여전히 유효한지 다시 볼까요?`}
+          </p>
+          <div className="mt-2.5 flex gap-2">
+            <button
+              type="button"
+              onClick={acceptSuggestedDate}
+              className="rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white"
+            >
+              네, 확인해주세요
+            </button>
+            <button
+              type="button"
+              onClick={() => setSuggested(null)}
+              className="rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink-soft"
+            >
+              아니요
+            </button>
+          </div>
+        </section>
+      )}
 
       <button
         type="button"
