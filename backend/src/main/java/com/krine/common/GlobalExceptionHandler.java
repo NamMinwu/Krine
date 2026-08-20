@@ -23,7 +23,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> llmFailure(com.krine.llm.LlmParseException e) {
         log.warn("LLM 호출/파싱 실패: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header("Retry-After", "10")
                 .body(ApiResponse.fail("AI 응답이 지연되고 있어요. 잠시 후 다시 시도해주세요"));
+    }
+
+    @ExceptionHandler(com.krine.llm.LlmUnavailableException.class)
+    public ResponseEntity<ApiResponse<Void>> llmUnavailable(com.krine.llm.LlmUnavailableException e) {
+        log.warn("LLM 일시 사용 불가: {} ({}초 후 재시도)", e.getMessage(), e.getRetryAfterSeconds());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header("Retry-After", String.valueOf(e.getRetryAfterSeconds()))
+                .body(ApiResponse.fail("AI가 잠시 붐비고 있어요"));
     }
 
     @ExceptionHandler(Exception.class)

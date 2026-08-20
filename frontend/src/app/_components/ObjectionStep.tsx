@@ -5,6 +5,9 @@ import { decisionApi } from "@/domains/decision/api";
 import type { ObjectionResult } from "@/domains/decision/types";
 import StepShell from "@/app/_components/StepShell";
 
+const BUSY_NOTICE =
+  "AI가 잠시 붐비고 있어요. 답변은 저장되어 있으니, 잠시 후 같은 버튼을 다시 눌러주세요.";
+
 type Phase = "intro" | "objection" | "reflect" | "resolving";
 
 export default function ObjectionStep({
@@ -34,6 +37,8 @@ export default function ObjectionStep({
       setReflectBack("");
       setNotice(null);
       setPhase("objection");
+    } catch {
+      setNotice(BUSY_NOTICE);
     } finally {
       setIsBusy(false);
     }
@@ -48,6 +53,8 @@ export default function ObjectionStep({
       const result = await decisionApi.answerObjection(objection.objectionId, answer.trim());
       setReflectBack(result.reflectBack);
       setPhase("reflect");
+    } catch {
+      setNotice(BUSY_NOTICE);
     } finally {
       setIsBusy(false);
     }
@@ -72,6 +79,8 @@ export default function ObjectionStep({
       } else {
         onDone();
       }
+    } catch {
+      setNotice(BUSY_NOTICE);
     } finally {
       setIsBusy(false);
     }
@@ -80,6 +89,7 @@ export default function ObjectionStep({
   if (phase === "intro") {
     return (
       <StepShell stepNo={stepNo} title="다른 관점에서 검토해볼까요?">
+        {notice && <p className="mb-3 rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">{notice}</p>}
         <p className="text-sm text-ink-soft">
           제가 반론을 하나씩 던질게요. 답은 당신이 씁니다. 결론이 바뀌지 않아도
           좋아요 — 판단의 이유가 또렷해지는 것이 목적이에요.
@@ -132,6 +142,7 @@ export default function ObjectionStep({
 
   return (
     <StepShell stepNo={stepNo} title={objection?.perspective ?? ""}>
+      {notice && <p className="mb-3 rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">{notice}</p>}
       <div className="rounded-2xl border border-line bg-surface p-4">
         <p className="text-[15px] leading-relaxed">{objection?.objection}</p>
       </div>

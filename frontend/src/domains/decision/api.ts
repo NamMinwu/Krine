@@ -18,16 +18,43 @@ interface Envelope<T> {
   error: string | null;
 }
 
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  });
-  const envelope = (await response.json()) as Envelope<T>;
-  if (!response.ok || !envelope.success) {
-    throw new Error(envelope.error ?? "요청에 실패했습니다");
+export class LlmBusyError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "LlmBusyError";
   }
-  return envelope.data;
+}
+
+const MAX_LLM_RETRIES = 2;
+const MAX_RETRY_WAIT_SECONDS = 60;
+
+const sleep = (seconds: number) =>
+  new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+
+async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  for (let attempt = 0; ; attempt += 1) {
+    const response = await fetch(`${API_URL}${path}`, {
+      headers: { "Content-Type": "application/json" },
+      ...init,
+    });
+    // LLM 쿼터/과부하(503): Retry-After만큼 기다렸다가 자동 재시도 — 사용자는 로딩이 이어질 뿐
+    if (response.status === 503 && attempt < MAX_LLM_RETRIES) {
+      const retryAfter = Math.min(
+        Number(response.headers.get("Retry-After") ?? 15) || 15,
+        MAX_RETRY_WAIT_SECONDS,
+      );
+      await sleep(retryAfter);
+      continue;
+    }
+    const envelope = (await response.json()) as Envelope<T>;
+    if (response.status === 503) {
+      throw new LlmBusyError(envelope.error ?? "AI가 잠시 붐비고 있어요");
+    }
+    if (!response.ok || !envelope.success) {
+      throw new Error(envelope.error ?? "요청에 실패했습니다");
+    }
+    return envelope.data;
+  }
 }
 
 export const decisionApi = {

@@ -39,6 +39,7 @@ function WriteFlow() {
   const [question, setQuestion] = useState<NextQuestion | null>(null);
   const [structureDraft, setStructureDraft] = useState<StructureDraft | null>(null);
   const [isBusy, setIsBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const [isResuming, setIsResuming] = useState(Boolean(resumeId));
 
   // 이어서 하기: 서버에 저장된 flowStep에서 재개한다
@@ -83,6 +84,7 @@ function WriteFlow() {
 
   const submitDiary = async (text: string) => {
     setIsBusy(true);
+    setNotice(null);
     setDiaryText(text);
     try {
       const decision = await decisionApi.createDraft(text);
@@ -90,6 +92,8 @@ function WriteFlow() {
       const result = await decisionApi.discover(decision.id);
       setDiscovered(result);
       setStep("discover");
+    } catch (e) {
+      setNotice(busyNotice(e));
     } finally {
       setIsBusy(false);
     }
@@ -107,6 +111,8 @@ function WriteFlow() {
       if (next.done) {
         await loadStructure(decisionId);
       }
+    } catch (e) {
+      setNotice(busyNotice(e));
     } finally {
       setIsBusy(false);
     }
@@ -124,6 +130,8 @@ function WriteFlow() {
       } else {
         setQuestion(next);
       }
+    } catch (e) {
+      setNotice(busyNotice(e));
     } finally {
       setIsBusy(false);
     }
@@ -131,9 +139,14 @@ function WriteFlow() {
 
   const loadStructure = async (id: number) => {
     setStep("structureLoading");
-    const draft = await decisionApi.structureDraft(id);
-    setStructureDraft(draft);
-    setStep("structure");
+    try {
+      const draft = await decisionApi.structureDraft(id);
+      setStructureDraft(draft);
+      setStep("structure");
+    } catch (e) {
+      setNotice(busyNotice(e));
+      setStep("questions");
+    }
   };
 
   const saveStructure = async (input: StructureInput) => {
@@ -143,6 +156,7 @@ function WriteFlow() {
     setIsBusy(true);
     try {
       await decisionApi.saveStructure(decisionId, input);
+      setNotice(null);
       // 반박에서 "판단을 수정한다"로 돌아올 때를 위해 최신 구조를 유지
       setStructureDraft({ ...input, suggestedReviewDate: null });
       setStep("objection");
@@ -159,6 +173,8 @@ function WriteFlow() {
     try {
       await decisionApi.confirm(decisionId, conclusion, firstExpression);
       router.replace(`/decisions/${decisionId}?confirmed=1`);
+    } catch (e) {
+      setNotice(busyNotice(e));
     } finally {
       setIsBusy(false);
     }
@@ -172,6 +188,25 @@ function WriteFlow() {
     );
   }
 
+  const banner = notice && (
+    <div className="fixed inset-x-0 top-0 z-30 mx-auto max-w-md px-4 pt-3">
+      <div className="rounded-xl border border-warn/40 bg-warn-soft px-4 py-3 text-sm text-warn shadow-sm">
+        {notice}
+        <button type="button" onClick={() => setNotice(null)} className="ml-2 underline">
+          닫기
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {banner}
+      {renderStep()}
+    </>
+  );
+
+  function renderStep() {
   switch (step) {
     case "diary":
       return (
@@ -225,6 +260,14 @@ function WriteFlow() {
         />
       );
   }
+  }
+}
+
+function busyNotice(e: unknown): string {
+  const busy = e instanceof Error && e.name === "LlmBusyError";
+  return busy
+    ? "AI가 잠시 붐비고 있어요. 쓰신 내용은 저장되어 있으니, 잠시 후 같은 버튼을 다시 눌러주세요."
+    : "일시적인 오류가 있었어요. 쓰신 내용은 저장되어 있으니 다시 시도해주세요.";
 }
 
 function firstSentenceOf(text: string): string {

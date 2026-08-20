@@ -57,10 +57,24 @@ public class GeminiClient implements LlmPort {
             return text.asText();
         } catch (LlmParseException e) {
             throw e;
+        } catch (org.springframework.web.client.HttpClientErrorException.TooManyRequests e) {
+            int retryAfter = parseRetrySeconds(e.getResponseBodyAsString());
+            log.warn("Gemini 쿼터 초과(429), {}초 후 재시도 가능", retryAfter);
+            throw new LlmUnavailableException(retryAfter, "Gemini 쿼터 초과");
         } catch (Exception e) {
             log.error("Gemini 호출 실패", e);
             throw new LlmParseException("Gemini 호출에 실패했습니다", e);
         }
+    }
+
+    // 429 본문의 "Please retry in 24.85s" / retryDelay 힌트에서 대기 시간을 추출
+    private static int parseRetrySeconds(String body) {
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("retry in ([0-9]+(?:\\.[0-9]+)?)s").matcher(body == null ? "" : body);
+        if (m.find()) {
+            return Math.min(60, (int) Math.ceil(Double.parseDouble(m.group(1))) + 1);
+        }
+        return 20;
     }
 
     // 운영 지표: 호출 단계별 토큰 사용량 (usageMetadata)
