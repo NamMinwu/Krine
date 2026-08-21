@@ -1,24 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Calendar, Eye, Pencil } from "lucide-react";
-import type {
-  ConditionInput,
-  StructureDraft,
-  StructureInput,
-} from "@/domains/decision/types";
-import ComparisonTable, { type OptionField } from "@/app/_components/ComparisonTable";
-import EditSheet from "./EditSheet";
+import ComparisonTable from "@/app/_components/ComparisonTable";
 import StepShell from "@/app/_components/StepShell";
-
-type EditTarget =
-  | { kind: "situation" }
-  | { kind: "tag" }
-  | { kind: "addOption" }
-  | { kind: "optionLabel"; index: number }
-  | { kind: "criteria" }
-  | { kind: "cell"; optionIndex: number; field: OptionField }
-  | { kind: "condition"; index: number };
+import type { StructureDraft, StructureInput } from "@/domains/decision/types";
+import { useStructureEditor } from "../_hooks/useStructureEditor";
+import EditSheet from "./EditSheet";
 
 export default function StructureStep({
   draft,
@@ -29,123 +16,8 @@ export default function StructureStep({
   isSaving: boolean;
   onSave: (input: StructureInput) => void;
 }) {
-  const [structure, setStructure] = useState<StructureInput>({
-    title: draft.title,
-    situation: draft.situation,
-    topicTag: draft.topicTag,
-    criteria: draft.criteria,
-    options: draft.options,
-    conditions: draft.conditions,
-    checkInDate: null,
-  });
-  const [suggested, setSuggested] = useState(draft.suggestedReviewDate);
-  const [editing, setEditing] = useState<EditTarget | null>(null);
-
-  const hasDateCondition = structure.conditions.some((c) => c.type === "DATE");
-
-  const acceptSuggestedDate = () => {
-    if (!suggested) {
-      return;
-    }
-    // 조건이 아니라 '확인 약속'으로 저장한다 — 조건 리스트에 섞이지 않는다
-    setStructure((s) => ({ ...s, checkInDate: suggested }));
-    setSuggested(null);
-  };
-
-  const editValue = (): { title: string; value: string; hint?: string } => {
-    if (!editing) {
-      return { title: "", value: "" };
-    }
-    switch (editing.kind) {
-      case "situation":
-        return { title: "판단의 배경", value: structure.situation ?? "" };
-      case "tag":
-        return { title: "주제 태그", value: structure.topicTag ?? "", hint: "한 단어로 (예: 업무, 건강, 소비)" };
-      case "addOption":
-        return { title: "선택지 추가", value: "", hint: "고민했던 다른 길의 이름 (예: 도입하지 않는다)" };
-      case "optionLabel":
-        return { title: "선택지 이름", value: structure.options[editing.index].label };
-      case "criteria":
-        return {
-          title: "판단 기준",
-          value: structure.criteria.join("\n"),
-          hint: "한 줄에 하나씩 적어주세요",
-        };
-      case "cell": {
-        const option = structure.options[editing.optionIndex];
-        return {
-          title: `${option.label} — 수정`,
-          value: option[editing.field].join("\n"),
-          hint: "한 줄에 하나씩 적어주세요",
-        };
-      }
-      case "condition":
-        return {
-          title: "판단을 바꿀 조건",
-          value: structure.conditions[editing.index].text,
-        };
-    }
-  };
-
-  const applyEdit = (value: string) => {
-    if (!editing) {
-      return;
-    }
-    const lines = value.split("\n").map((l) => l.trim()).filter(Boolean);
-    setStructure((s) => {
-      switch (editing.kind) {
-        case "situation":
-          return { ...s, situation: value.trim() };
-        case "tag":
-          return { ...s, topicTag: value.trim() };
-        case "addOption": {
-          const label = value.trim();
-          if (!label) {
-            return s;
-          }
-          return {
-            ...s,
-            options: [...s.options, { label, gains: [], sacrifices: [] }],
-          };
-        }
-        case "optionLabel": {
-          const options = s.options.map((o, i) =>
-            i === editing.index ? { ...o, label: value.trim() } : o,
-          );
-          return { ...s, options };
-        }
-        case "criteria":
-          return { ...s, criteria: lines };
-        case "cell": {
-          const options = s.options.map((o, i) =>
-            i === editing.optionIndex ? { ...o, [editing.field]: lines } : o,
-          );
-          return { ...s, options };
-        }
-        case "condition": {
-          const conditions = s.conditions.map((c, i) =>
-            i === editing.index ? { ...c, text: value.trim() } : c,
-          );
-          return { ...s, conditions };
-        }
-      }
-    });
-    setEditing(null);
-  };
-
-  const toggleConditionType = (index: number) => {
-    setStructure((s) => ({
-      ...s,
-      conditions: s.conditions.map((c, i): ConditionInput => {
-        if (i !== index) {
-          return c;
-        }
-        return c.type === "DATE"
-          ? { ...c, type: "EVENT", dueDate: null }
-          : { ...c, type: "DATE", dueDate: suggestedOrMonthLater() };
-      }),
-    }));
-  };
+  const editor = useStructureEditor(draft);
+  const { structure } = editor;
 
   return (
     <StepShell stepNo={3} title="제가 이해한 판단이 맞나요?">
@@ -158,7 +30,7 @@ export default function StructureStep({
           <h2 className="text-base font-bold">{structure.title}</h2>
           <button
             type="button"
-            onClick={() => setEditing({ kind: "tag" })}
+            onClick={() => editor.beginEdit({ kind: "tag" })}
             className="shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-xs text-accent"
           >
             {structure.topicTag || "태그"}{" "}
@@ -167,7 +39,7 @@ export default function StructureStep({
         </div>
         <button
           type="button"
-          onClick={() => setEditing({ kind: "situation" })}
+          onClick={() => editor.beginEdit({ kind: "situation" })}
           className="mt-2 w-full text-left text-sm text-ink-soft"
         >
           {structure.situation || "판단의 배경을 적어주세요"}{" "}
@@ -180,16 +52,19 @@ export default function StructureStep({
           <h3 className="text-sm font-semibold">판단 기준</h3>
           <button
             type="button"
-            onClick={() => setEditing({ kind: "criteria" })}
+            onClick={() => editor.beginEdit({ kind: "criteria" })}
             className="text-xs text-ink-soft"
           >
             <Pencil size={11} className="mr-0.5 inline" aria-hidden /> 수정
           </button>
         </div>
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {structure.criteria.map((c) => (
-            <span key={c} className="rounded-full bg-accent-soft px-2.5 py-1 text-xs text-accent">
-              {c}
+          {structure.criteria.map((criterion, index) => (
+            <span
+              key={index}
+              className="rounded-full bg-accent-soft px-2.5 py-1 text-xs text-accent"
+            >
+              {criterion}
             </span>
           ))}
         </div>
@@ -201,14 +76,14 @@ export default function StructureStep({
           <ComparisonTable
             options={structure.options}
             onEditCell={(optionIndex, field) =>
-              setEditing({ kind: "cell", optionIndex, field })
+              editor.beginEdit({ kind: "cell", optionIndex, field })
             }
-            onEditLabel={(index) => setEditing({ kind: "optionLabel", index })}
+            onEditLabel={(index) => editor.beginEdit({ kind: "optionLabel", index })}
           />
         </div>
         <button
           type="button"
-          onClick={() => setEditing({ kind: "addOption" })}
+          onClick={() => editor.beginEdit({ kind: "addOption" })}
           className="mt-3 w-full rounded-xl border border-dashed border-line py-2 text-sm text-ink-soft"
         >
           ＋ 선택지 추가
@@ -219,10 +94,10 @@ export default function StructureStep({
         <h3 className="text-sm font-semibold">판단을 바꿀 조건</h3>
         <ul className="mt-2 space-y-2">
           {structure.conditions.map((condition, index) => (
-            <li key={`${condition.text}-${index}`} className="flex items-center gap-2">
+            <li key={index} className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => toggleConditionType(index)}
+                onClick={() => editor.toggleConditionType(index)}
                 className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
                   condition.type === "DATE"
                     ? "bg-accent-soft text-accent"
@@ -230,14 +105,20 @@ export default function StructureStep({
                 }`}
               >
                 {condition.type === "DATE" ? (
-                  <><Calendar size={11} className="mr-0.5 inline" aria-hidden />{condition.dueDate ?? "시점형"}</>
+                  <>
+                    <Calendar size={11} className="mr-0.5 inline" aria-hidden />
+                    {condition.dueDate ?? "시점형"}
+                  </>
                 ) : (
-                  <><Eye size={11} className="mr-0.5 inline" aria-hidden />사건형</>
+                  <>
+                    <Eye size={11} className="mr-0.5 inline" aria-hidden />
+                    사건형
+                  </>
                 )}
               </button>
               <button
                 type="button"
-                onClick={() => setEditing({ kind: "condition", index })}
+                onClick={() => editor.beginEdit({ kind: "condition", index })}
                 className="flex-1 text-left text-sm"
               >
                 {condition.text}{" "}
@@ -255,7 +136,7 @@ export default function StructureStep({
             {structure.checkInDate}에 확인하러 올게요.
             <button
               type="button"
-              onClick={() => setStructure((s) => ({ ...s, checkInDate: null }))}
+              onClick={editor.clearCheckInDate}
               className="ml-2 text-xs text-ink-soft underline"
             >
               취소
@@ -264,25 +145,25 @@ export default function StructureStep({
         </section>
       )}
 
-      {suggested && !structure.checkInDate && !hasDateCondition && (
+      {editor.suggested && !structure.checkInDate && !editor.hasDateCondition && (
         <section className="mt-3 rounded-2xl border border-line bg-surface p-4">
           <h3 className="text-sm font-semibold">다시 볼 시점</h3>
           <p className="mt-1.5 text-sm text-ink-soft">
             {structure.conditions.length > 0
-              ? `위 조건은 언제 일어날지 알 수 없어요. ${suggested}에 조건이 생겼는지 확인하러 올까요?`
-              : `판단을 바꿀 조건이 없다면, ${suggested}에 이 판단이 여전히 유효한지 다시 볼까요?`}
+              ? `위 조건은 언제 일어날지 알 수 없어요. ${editor.suggested}에 조건이 생겼는지 확인하러 올까요?`
+              : `판단을 바꿀 조건이 없다면, ${editor.suggested}에 이 판단이 여전히 유효한지 다시 볼까요?`}
           </p>
           <div className="mt-2.5 flex gap-2">
             <button
               type="button"
-              onClick={acceptSuggestedDate}
+              onClick={editor.acceptSuggestedDate}
               className="rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white"
             >
               네, 확인해주세요
             </button>
             <button
               type="button"
-              onClick={() => setSuggested(null)}
+              onClick={editor.dismissSuggested}
               className="rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink-soft"
             >
               아니요
@@ -300,19 +181,13 @@ export default function StructureStep({
         {isSaving ? "정리하고 있어요…" : "이대로 정리하기"}
       </button>
 
-      {editing && (
+      {editor.editSheet && (
         <EditSheet
-          {...editValue()}
-          onSave={applyEdit}
-          onClose={() => setEditing(null)}
+          {...editor.editSheet}
+          onSave={editor.applyEdit}
+          onClose={editor.cancelEdit}
         />
       )}
     </StepShell>
   );
-}
-
-function suggestedOrMonthLater(): string {
-  const date = new Date();
-  date.setDate(date.getDate() + 30);
-  return date.toISOString().slice(0, 10);
 }
