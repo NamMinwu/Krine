@@ -55,6 +55,15 @@ export function useConfirm(id: number) {
   });
 }
 
+export function useResolveObjection() {
+  const invalidate = useInvalidateAll();
+  return useMutation({
+    mutationFn: (input: { objectionId: number; resolution: string }) =>
+      decisionApi.resolveObjection(input.objectionId, input.resolution),
+    onSuccess: invalidate,
+  });
+}
+
 export function useReview(id: number) {
   const invalidate = useInvalidateAll();
   return useMutation({
