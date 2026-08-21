@@ -4,16 +4,9 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Calendar, Eye, Swords } from "lucide-react";
 import ComparisonTable from "@/app/_components/ComparisonTable";
-import { relativeTime } from "@/domains/decision/labels";
+import { OBJECTION_RESOLUTION_LABELS, relativeTime } from "@/domains/decision/labels";
 import { useDecision } from "@/domains/decision/queries";
 import VersionTimeline from "./_components/VersionTimeline";
-
-const RESOLUTION_LABELS: Record<string, string> = {
-  DEFENDED: "방어함",
-  REVISED: "판단 수정",
-  DEFERRED: "보류 — 재검토 대기",
-  OPEN: "진행 중",
-};
 
 export default function DecisionDetailPage() {
   const router = useRouter();
@@ -137,7 +130,7 @@ export default function DecisionDetailPage() {
                   </p>
                 )}
                 <span className="mt-1 inline-block rounded-full bg-bg px-2 py-0.5 text-xs text-ink-soft">
-                  {RESOLUTION_LABELS[objection.resolution]}
+                  {OBJECTION_RESOLUTION_LABELS[objection.resolution]}
                 </span>
               </li>
             ))}

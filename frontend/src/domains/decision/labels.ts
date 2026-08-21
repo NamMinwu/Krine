@@ -33,6 +33,13 @@ export const VERDICT_LABELS: Record<Verdict, { label: string; icon: string; clas
   REVERSED: { label: "뒤집음", icon: "⤴", className: "bg-warn-soft text-warn" },
 };
 
+export const OBJECTION_RESOLUTION_LABELS: Record<string, string> = {
+  DEFENDED: "방어함",
+  REVISED: "판단 수정",
+  DEFERRED: "보류 — 재검토 대기",
+  OPEN: "진행 중",
+};
+
 export const QUEUE_KIND_LABELS: Record<QueueKind, string> = {
   CHECK_IN: "확인하기로 한 날이 되었어요",
   DUE_DATE: "설정한 날이 되었어요",

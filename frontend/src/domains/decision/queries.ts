@@ -55,6 +55,23 @@ export function useConfirm(id: number) {
   });
 }
 
+export function useCreateObjection(decisionId: number) {
+  const invalidate = useInvalidateAll();
+  return useMutation({
+    mutationFn: () => decisionApi.objection(decisionId),
+    onSuccess: invalidate,
+  });
+}
+
+export function useAnswerObjection() {
+  const invalidate = useInvalidateAll();
+  return useMutation({
+    mutationFn: (input: { objectionId: number; answer: string }) =>
+      decisionApi.answerObjection(input.objectionId, input.answer),
+    onSuccess: invalidate,
+  });
+}
+
 export function useResolveObjection() {
   const invalidate = useInvalidateAll();
   return useMutation({

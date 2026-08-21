@@ -70,6 +70,7 @@ function WriteStepView({ flow }: { flow: ReturnType<typeof useWriteFlow> }) {
     case "questions":
       return flow.question ? (
         <QuestionStep
+          key={flow.question.progress}
           question={flow.question}
           isSubmitting={flow.isBusy}
           onAnswer={flow.submitAnswer}
